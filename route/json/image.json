@@ -1,0 +1,32 @@
+[
+  {
+    "controller" : "image",
+    "method" : "post",
+    "rule" : "",
+    "route": "upload",
+    "name" : "上传图片",
+    "desc" : "",
+    "permission" : null,
+    "post" : {
+      "image" : {
+        "type" : "file",
+        "max_len" : 0,
+        "desc" : "图像",
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 201,
+        "message" : "成功上传图片",
+        "data" : {
+          "image_id" : ["int", "图片id"]
+        }
+      },
+
+      {
+        "errcode" : 130001
+      }
+    ]
+  }
+]

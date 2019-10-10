@@ -1,0 +1,27 @@
+[
+
+  {
+    "controller" : "wechat",
+    "method" : "any",
+    "rule" : "acceptPayNotify",
+    "route": "acceptPayNotify",
+    "name" : "支付回调接口",
+    "desc" : "",
+    "permission" : "USER",
+    "param" : {},
+    "post" : {},
+    "response" : []
+  },
+  {
+    "controller" : "wechat",
+    "method" : "post",
+    "rule" : "enterRefusePay/:lectureId",
+    "route": "enterRefusePay",
+    "name" : "",
+    "desc" : "",
+    "permission" : "USER",
+    "param" : {},
+    "post" : {},
+    "response" : []
+  }
+]

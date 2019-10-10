@@ -1,0 +1,77 @@
+[
+  {
+    "controller" : "wx",
+    "method" : "get",
+    "rule" : "token/:code",
+    "route": "getToken",
+    "name" : "小程序获取令牌",
+    "desc" : "",
+    "permission" : null,
+    "param" : {
+      "code" : {
+        "type" : "string",
+        "desc" : "微信分发的code",
+        "max_len" : 0,
+        "require" : true
+      }
+    },
+    "post" : {},
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取令牌",
+        "data" : {
+          "token" : ["string", "令牌字符串"]
+        }
+      },
+      {"errcode" : 110001},
+      {"errcode" : 110002}
+    ]
+  },
+
+  {
+    "controller" : "wx",
+    "method" : "get",
+    "rule" : "qr_code",
+    "route": "getQRCode",
+    "name" : "获取微信小程序二维码",
+    "permission" : null,
+    "param" : {
+      "scene" : {
+        "type" : "string",
+        "desc" : "给界面的参数",
+        "max_len" : 32,
+        "require" : true
+      },
+      "page" : {
+        "type" : "string",
+        "desc" : "小程序页面",
+        "max_len" : 0,
+        "require" : false,
+        "default" : null
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取微信小程序二维码",
+        "data" : {
+          "path" : ["string", "二维码图片路径"]
+        }
+      },
+      {"errcode" : 110004},
+      {"errcode" : 110005}
+    ]
+  },
+
+  {
+    "controller" : "wx",
+    "method" : "any",
+    "rule" : "callback/pay_notify",
+    "route": "payNotifyCallback",
+    "name" : "支付回调接口",
+    "permission" : null,
+    "desc" : "微信后台调用的回调接口",
+    "response" : []
+  }
+]

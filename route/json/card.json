@@ -1,0 +1,93 @@
+[
+  {
+    "controller" : "card",
+    "method" : "get",
+    "rule" : "",
+    "route": "get",
+    "name" : "获取用户名片",
+    "desc" : "",
+    "permission" : "USER",
+    "param" : {
+      "page" : {
+        "type" : "int",
+        "max_len" : 6,
+        "desc" : "页码",
+        "require" : false,
+        "default" : 1
+      },
+      "row" : {
+        "type" : "int",
+        "max_len" : 6,
+        "desc" : "每页条数",
+        "require" : false,
+        "default" : 5
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取用户名片",
+        "data" : {
+          "image_info" : ["array", "名片图像信息"]
+        }
+      },
+      {"errcode" :  160001}
+    ]
+  },
+
+  {
+    "controller" : "card",
+    "method" : "post",
+    "rule" : "",
+    "route": "upload",
+    "name" : "添加名片",
+    "desc" : "",
+    "permission" : "USER",
+    "post" : {
+      "card" : {
+        "type" : "file",
+        "max_len" : 0,
+        "desc" : "名片图像",
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 201,
+        "message" : "成功添加名片",
+        "data" : {}
+      },
+      {"errcode" :  160002}
+    ]
+  },
+
+  {
+    "controller" : "card",
+    "method" : "delete",
+    "rule" : ":cardId",
+    "rule_pattern" : {
+      "cardId" : "@id"
+    },
+    "route": "delete",
+    "name" : "删除名片",
+    "desc" : "",
+    "permission" : "USER",
+    "param" : {
+      "cardId" : {
+        "type" : "int",
+        "max_len" : 11,
+        "desc" : "名片id",
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功删除名片",
+        "data" : {}
+      },
+      {"errcode" :  160003},
+      {"errcode" :  160004}
+    ]
+  }
+]

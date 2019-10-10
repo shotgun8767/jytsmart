@@ -1,0 +1,70 @@
+[
+  {
+    "controller" : "banner",
+    "method" : "get",
+    "rule" : "",
+    "route": "get",
+    "name" : "获取轮播图",
+    "desc" : "",
+    "permission" : null,
+    "param" : {
+      "limit" : {
+        "type" : "int",
+        "desc" : "获取的数量",
+        "max_len" : 6,
+        "require" : false,
+        "default" : 5
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取轮播图",
+        "data" : {
+          "image_info" : ["array", "图像信息"],
+          "lecture_id" : ["int", "跳转到的会议的id"]
+        }
+      },
+
+      {
+        "errcode" : 150001
+      }
+    ]
+  },
+
+  {
+    "controller" : "banner",
+    "method" : "post",
+    "rule" : "",
+    "route": "upload",
+    "name" : "创建轮播图",
+    "desc" : "",
+    "permission" : "ADMIN",
+    "post" : {
+      "lecture_id" : {
+        "type" : "int",
+        "desc" : "跳转到的会议id",
+        "max_len" : 11,
+        "require" : true
+      },
+      "listorder" : {
+        "type" : "int",
+        "desc" : "优先级",
+        "max_len" : 6,
+        "require" : false,
+        "default" : 0
+      }
+    },
+    "response" : [
+      {
+        "code" : 201,
+        "message" : "成功创建轮播图",
+        "data" : {}
+      },
+
+      {
+        "errcode" : 150002
+      }
+    ]
+  }
+]

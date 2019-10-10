@@ -1,0 +1,153 @@
+[
+  {
+    "controller" : "user",
+    "method" : "get",
+    "rule" : "",
+    "route": "getInfo",
+    "name" : "获取客户端用户信息",
+    "desc" : "",
+    "permission" : "USER",
+    "param" : {},
+    "post" : {},
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取用户信息",
+        "data" : {
+          "id" : ["int", "用户id"],
+          "name" : ["string", "姓名"],
+          "telephone" : ["string", "手机号码"],
+          "company" : ["string", "所属公司"],
+          "domain" : ["string", "领域"],
+          "occupation" : ["string", "职位"],
+          "address" : ["string", "联系地址"],
+          "focus" : ["string", "研究方向"],
+          "email": ["string", "邮箱"],
+          "avatar_url" : ["string", "用户头像url"]
+        }
+      },
+
+      {
+        "errcode" : 100001
+      }
+    ]
+  },
+
+  {
+    "controller" : "user",
+    "method" : "post",
+    "rule" : "",
+    "route": "edit",
+    "name" : "编辑客户端用户信息",
+    "desc" : "",
+    "permission" : "USER",
+    "param" : {},
+    "post" : {
+      "name" : {
+        "type" : "string",
+        "desc" : "姓名",
+        "max_len" : 15,
+        "require" : false
+      },
+
+      "telephone" : {
+        "type" : "int",
+        "desc" : "手机号码",
+        "max_len" : 11,
+        "require" : false,
+        "validate" : {
+          "tel" : "这不是一个合法的手机号码"
+        }
+      },
+
+      "company" : {
+        "type" : "string",
+        "desc" : "所属公司",
+        "max_len" : 100,
+        "require" : false
+      },
+
+      "domain" : {
+        "type" : "string",
+        "desc" : "领域",
+        "max_len" : 50,
+        "require" : false
+      },
+
+      "occupation" : {
+        "type" : "string",
+        "desc" : "职位",
+        "max_len" : 50,
+        "require" : false
+      },
+
+      "address" : {
+        "type" : "string",
+        "desc" : "联系地址",
+        "max_len" : 200,
+        "require" : false
+      },
+
+      "focus" : {
+        "type" : "string",
+        "desc" : "研究方向",
+        "max_len" : 50,
+        "require" : false
+      },
+
+      "email" : {
+        "type" : "string",
+        "desc" : "邮箱",
+        "max_len" : 100,
+        "require" : false,
+        "validate" : {
+          "email" : "这不是一个合法的邮箱"
+        }
+      },
+
+      "avatar_url" : {
+        "type" : "string",
+        "desc" : "用户头像url",
+        "max_len" : 500,
+        "require" : false
+      }
+    },
+    "response" : [
+
+    ]
+  },
+
+  {
+    "controller" : "user",
+    "method" : "get",
+    "rule" : ":userId",
+    "route": "getInfoById",
+    "name" : "获取用户信息",
+    "desc" : "获取客户端用户信息请用专用接口。",
+    "permission" : "USER",
+    "param" : {},
+    "post" : {},
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取用户信息",
+        "data" : {
+          "id" : ["int", "用户id"],
+          "name" : ["string", "姓名"],
+          "telephone" : ["string", "手机号码"],
+          "company" : ["string", "所属公司"],
+          "domain" : ["string", "领域"],
+          "occupation" : ["string", "职位"],
+          "address" : ["string", "联系地址"],
+          "focus" : ["string", "研究方向"],
+          "email": ["string", "邮箱"],
+          "avatar_url" : ["string", "用户头像url"]
+        }
+      },
+
+      {
+        "errcode" : 100001
+      }
+    ]
+  }
+]

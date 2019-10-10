@@ -1,0 +1,22 @@
+[
+  {
+    "controller" : "performance",
+    "method" : "get",
+    "rule" : "backend",
+    "route": "backend",
+    "name" : "测试后端性能",
+    "permission" : null,
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "后端性能",
+        "data" : {
+          "backend_init": ["float", "框架启动时间"],
+          "route_init": ["float", "路由加载时间"],
+          "api_init": ["float", "Api模块启动时间"],
+          "response" : ["float", "响应总时间"]
+        }
+      }
+    ]
+  }
+]

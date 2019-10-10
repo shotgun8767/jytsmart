@@ -1,0 +1,803 @@
+[
+  {
+    "controller" : "lecture",
+    "method" : "get",
+    "rule" : "public",
+    "route": "getPublic",
+    "name" : "获取公共会议",
+    "desc" : "支持分页操作",
+    "permission" : null,
+    "param" : {
+      "page" : {
+        "type" : "int",
+        "desc" : "页码",
+        "max_len" : 4,
+        "require" : true
+      },
+
+      "row" : {
+        "type" : "int",
+        "desc" : "每页条数",
+        "max_len" : 4,
+        "require" : true
+      },
+
+      "tag_id" : {
+        "type" : "int",
+        "desc" : "标签id",
+        "max_len" : 11,
+        "require" : false
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取公共会议",
+        "data" : {
+          "id" : ["int", "会议id"],
+          "title" : ["string", "标题"],
+          "holder" : ["string", "举办组织"],
+          "address" : ["string", "地址"],
+          "enter_fee" : ["int", "参与费用（分）"],
+          "capacity" : ["int", "最大参与人数"],
+          "detail" : ["int", "详情"],
+          "enter_start" : ["int", "报名开始时间（时间戳）"],
+          "enter_end" : ["int", "报名结束时间（时间戳）"],
+          "start" : ["int", "开始时间（时间戳）"],
+          "end" : ["int", "结束时间（时间戳）"],
+          "lat" : ["double", "纬度"],
+          "lng" : ["double", "经度"],
+          "group_image_info" : ["array", "群组二维图片信息"],
+          "main_image_info" : ["array", "封面图片信息"],
+          "qr_code_info" : ["array", "签到二维码图片信息"]
+        }
+      },
+      {
+        "errcode" : 120001
+      }
+    ]
+  },
+
+  {
+    "controller" : "lecture",
+    "method" : "get",
+    "rule" : "private/:userId",
+    "rule_pattern" : {
+      "userId" : "@id"
+    },
+    "route": "getPrivate",
+    "name" : "获取私人会议",
+    "desc" : "支持分页操作",
+    "permission" : null,
+    "param" : {
+      "userId" : {
+        "type" : "int",
+        "desc" : "用户id",
+        "max_len" : 11,
+        "require" : true
+      },
+      "page" : {
+        "type" : "int",
+        "desc" : "页码",
+        "max_len" : 4,
+        "require" : true
+      },
+
+      "row" : {
+        "type" : "int",
+        "desc" : "每页条数",
+        "max_len" : 4,
+        "require" : true
+      },
+      "tag_id" : {
+        "type" : "int",
+        "desc" : "标签id",
+        "max_len" : 11,
+        "require" : false
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取公共会议",
+        "data" : {
+          "id" : ["int", "会议id"],
+          "title" : ["string", "标题"],
+          "holder" : ["string", "举办组织"],
+          "address" : ["string", "地址"],
+          "enter_fee" : ["int", "参与费用（分）"],
+          "capacity" : ["int", "最大参与人数"],
+          "detail" : ["int", "详情"],
+          "enter_start" : ["int", "报名开始时间（时间戳）"],
+          "enter_end" : ["int", "报名结束时间（时间戳）"],
+          "start" : ["int", "开始时间（时间戳）"],
+          "end" : ["int", "结束时间（时间戳）"],
+          "lat" : ["double", "纬度"],
+          "lng" : ["double", "经度"],
+          "group_image_info" : ["array", "群组二维图片信息"],
+          "main_image_info" : ["array", "封面图片信息"],
+          "qr_code_info" : ["array", "签到二维码图片信息"]
+        }
+      },
+      {
+        "errcode" : 120001
+      }
+    ]
+  },
+
+  {
+    "controller" : "lecture",
+    "method" : "get",
+    "rule" : "private",
+    "route": "getPersonal",
+    "name" : "获取客户端用户发布的私人会议",
+    "desc" : "",
+    "permission" : "USER",
+    "param" : {
+      "page" : {
+        "type" : "int",
+        "desc" : "页码",
+        "max_len" : 4,
+        "require" : true
+      },
+      "row" : {
+        "type" : "int",
+        "desc" : "每页条数",
+        "max_len" : 4,
+        "require" : true
+      },
+      "tag_id" : {
+        "type" : "int",
+        "desc" : "标签id",
+        "max_len" : 11,
+        "require" : false
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取私人会议",
+        "data" : {
+          "id" : ["int", "会议id"],
+          "title" : ["string", "标题"],
+          "holder" : ["string", "举办组织"],
+          "address" : ["string", "地址"],
+          "enter_fee" : ["int", "参与费用（分）"],
+          "capacity" : ["int", "最大参与人数"],
+          "detail" : ["int", "详情"],
+          "enter_start" : ["int", "报名开始时间（时间戳）"],
+          "enter_end" : ["int", "报名结束时间（时间戳）"],
+          "start" : ["int", "开始时间（时间戳）"],
+          "end" : ["int", "结束时间（时间戳）"],
+          "lat" : ["double", "纬度"],
+          "lng" : ["double", "经度"],
+          "group_image_info" : ["array", "群组二维码图片信息"],
+          "main_image_info" : ["array", "封面图片信息"],
+          "qr_code_info" : ["array", "签到二维码图片信息"]
+        }
+      },
+      {
+        "errcode" : 120001
+      }
+    ]
+  },
+
+  {
+    "controller" : "lecture",
+    "method" : "get",
+    "rule" : ":lectureId",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "getById",
+    "name" : "获取会议信息",
+    "desc" : "通过id获取会议信息",
+    "permission" : null,
+    "param" : {},
+    "post" : {},
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取会议信息",
+        "data" : {
+          "id" : ["int", "会议id"],
+          "title" : ["string", "标题"],
+          "holder" : ["string", "举办组织"],
+          "address" : ["string", "地址"],
+          "enter_fee" : ["int", "报名费用（分）"],
+          "capacity" : ["int", "最大参与人数"],
+          "detail" : ["int", "详情"],
+          "enter_start" : ["int", "报名开始时间（时间戳）"],
+          "enter_end" : ["int", "报名结束时间（时间戳）"],
+          "start" : ["int", "开始时间（时间戳）"],
+          "end" : ["int", "结束时间（时间戳）"],
+          "lat" : ["double", "纬度"],
+          "lng" : ["double", "经度"],
+          "group_image_info" : ["array", "群组二维码图片信息"],
+          "main_image_info" : ["array", "封面图片信息"],
+          "qr_code_info" : ["array", "签到二维码图片信息"]
+        }
+      },
+      {
+        "errcode" : 120002
+      }
+    ]
+  },
+
+  {
+    "controller" : "lecture",
+    "method" : "post",
+    "rule" : "public",
+    "route": "uploadPublic",
+    "name" : "创建公共会议",
+    "desc" : "",
+    "permission" : "PARTNER",
+    "param" : {},
+    "post" : {
+      "title" : {
+        "type" : "string",
+        "desc" : "标题",
+        "max_len" : 50,
+        "require" : true
+      },
+      "holder" : {
+        "type" : "string",
+        "desc" : "主办组织",
+        "max_len" : 50,
+        "require" : true
+      },
+      "place" : {
+        "type" : "string",
+        "desc" : "举办城市",
+        "max_len" : 20,
+        "require" : true
+      },
+      "address" : {
+        "type" : "string",
+        "desc" : "详细地址",
+        "max_len" : 200,
+        "require" : true
+      },
+      "enter_fee" : {
+        "type" : "int",
+        "desc" : "报名费用（分）",
+        "max_len" : 11,
+        "require" : false,
+        "default" : 0
+      },
+      "capacity" : {
+        "type" : "string",
+        "desc" : "最大参与人数",
+        "max_len" : 10,
+        "require" : false,
+        "default" : 0
+      },
+      "recallable" : {
+        "type" : "bool",
+        "desc" : "是否可撤回报名",
+        "max_len" : 10,
+        "require" : false,
+        "default" : 1
+      },
+      "detail" : {
+        "type" : "string",
+        "desc" : "详细介绍",
+        "max_len" : 0,
+        "require" : false,
+        "default" : ""
+      },
+      "enter_start" : {
+        "type" : "int",
+        "desc" : "报名起始时间戳",
+        "max_len" : 10,
+        "require" : false,
+        "default" : 0
+      },
+      "enter_end" : {
+        "type" : "int",
+        "desc" : "报名结束时间戳",
+        "max_len" : 10,
+        "require" : false,
+        "default" : 0
+      },
+      "start" : {
+        "type" : "int",
+        "desc" : "会议开始时间戳",
+        "max_len" : 10,
+        "require" : true
+      },
+      "end" : {
+        "type" : "int",
+        "desc" : "会议结束时间戳",
+        "max_len" : 10,
+        "require" : true
+      },
+      "lat" : {
+        "type" : "float",
+        "desc" : "经度",
+        "max_len" : 0,
+        "require" : false
+      },
+      "lng" : {
+        "type" : "float",
+        "desc" : "纬度",
+        "max_len" : 0,
+        "require" : false
+      },
+      "require_fields" : {
+        "type" : "string",
+        "desc" : "报名必填字段。不同字段用逗号隔开",
+        "max_len" : 300,
+        "require" : false,
+        "default" : "name"
+      }
+    },
+    "response" : [
+      {
+        "code" : 201,
+        "message" : "成功创建公共会议",
+        "data" : {
+          "lecture_id" : ["int", "会议id"]
+        }
+      },
+      {
+        "errcode" : 120003
+      }
+    ]
+  },
+
+  {
+    "controller" : "lecture",
+    "method" : "post",
+    "rule" : "private",
+    "route": "uploadPrivate",
+    "name" : "创建私人会议",
+    "desc" : "",
+    "permission" : "USER",
+    "post" : {
+      "title" : {
+        "type" : "string",
+        "desc" : "标题",
+        "max_len" : 50,
+        "require" : true
+      },
+      "holder" : {
+        "type" : "string",
+        "desc" : "主办组织",
+        "max_len" : 50,
+        "require" : true
+      },
+      "place" : {
+        "type" : "string",
+        "desc" : "举办城市",
+        "max_len" : 20,
+        "require" : true
+      },
+      "address" : {
+        "type" : "string",
+        "desc" : "详细地址",
+        "max_len" : 200,
+        "require" : true
+      },
+      "enter_fee" : {
+        "type" : "int",
+        "desc" : "报名费用（分）",
+        "max_len" : 11,
+        "require" : false,
+        "default" : 0
+      },
+      "capacity" : {
+        "type" : "string",
+        "desc" : "最大参与人数",
+        "max_len" : 10,
+        "require" : false,
+        "default" : 0
+      },
+      "recallable" : {
+        "type" : "bool",
+        "desc" : "是否可撤回报名",
+        "max_len" : 10,
+        "require" : false,
+        "default" : 1
+      },
+      "detail" : {
+        "type" : "string",
+        "desc" : "详细介绍",
+        "max_len" : 0,
+        "require" : false,
+        "default" : ""
+      },
+      "enter_start" : {
+        "type" : "int",
+        "desc" : "报名起始时间戳",
+        "max_len" : 10,
+        "require" : false,
+        "default" : 0
+      },
+      "enter_end" : {
+        "type" : "int",
+        "desc" : "报名结束时间戳",
+        "max_len" : 10,
+        "require" : false,
+        "default" : 0
+      },
+      "start" : {
+        "type" : "int",
+        "desc" : "会议开始时间戳",
+        "max_len" : 10,
+        "require" : true
+      },
+      "end" : {
+        "type" : "int",
+        "desc" : "会议结束时间戳",
+        "max_len" : 10,
+        "require" : true
+      },
+      "lat" : {
+        "type" : "float",
+        "desc" : "经度",
+        "max_len" : 0,
+        "require" : false
+      },
+      "lng" : {
+        "type" : "float",
+        "desc" : "纬度",
+        "max_len" : 0,
+        "require" : false
+      },
+      "require_fields" : {
+        "type" : "string",
+        "desc" : "报名必填字段。不同字段用逗号隔开",
+        "max_len" : 300,
+        "require" : false,
+        "default" : "name"
+      }
+    },
+    "response" : [
+      {
+        "code" : 201,
+        "message" : "成功创建私人会议",
+        "data" : {
+          "lecture_id" : ["int", "会议id"]
+        }
+      },
+      {
+        "errcode" : 120004
+      }
+    ]
+  },
+
+  {
+    "controller" : "lecture",
+    "method" : "delete",
+    "rule" : ":lectureId",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "delete",
+    "name" : "删除会议",
+    "desc" : "",
+    "permission" : "USER",
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "desc" : "会议id",
+        "max_len" : 11,
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功删除会议",
+        "data" : {}
+      },
+      {
+        "errcode" : 120005
+      },
+      {
+        "errcode" : 120001
+      }
+    ]
+  },
+
+  {
+    "controller" : "lecture",
+    "method" : "post",
+    "rule" : ":lectureId",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "edit",
+    "name" : "修改会议",
+    "desc" : "",
+    "permission" : "USER",
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "desc" : "会议id",
+        "max_len" : 11,
+        "require" : false
+      }
+    },
+    "post" : {
+      "title" : {
+        "type" : "string",
+        "desc" : "标题",
+        "max_len" : 50,
+        "require" : false
+      },
+      "holder" : {
+        "type" : "string",
+        "desc" : "主办组织",
+        "max_len" : 50,
+        "require" : false
+      },
+      "place" : {
+        "type" : "string",
+        "desc" : "举办城市",
+        "max_len" : 20,
+        "require" : false
+      },
+      "address" : {
+        "type" : "string",
+        "desc" : "详细地址",
+        "max_len" : 200,
+        "require" : false
+      },
+      "capacity" : {
+        "type" : "string",
+        "desc" : "最大参与人数",
+        "max_len" : 10,
+        "require" : false
+      },
+      "detail" : {
+        "type" : "string",
+        "desc" : "详细介绍",
+        "max_len" : 0,
+        "require" : false
+      },
+      "enter_start" : {
+        "type" : "int",
+        "desc" : "报名起始时间戳",
+        "max_len" : 10,
+        "require" : false
+      },
+      "enter_end" : {
+        "type" : "int",
+        "desc" : "报名结束时间戳",
+        "max_len" : 10,
+        "require" : false
+      },
+      "start" : {
+        "type" : "int",
+        "desc" : "会议开始时间戳",
+        "max_len" : 10,
+        "require" : false
+      },
+      "end" : {
+        "type" : "int",
+        "desc" : "会议结束时间戳",
+        "max_len" : 10,
+        "require" : false
+      },
+      "lat" : {
+        "type" : "float",
+        "desc" : "经度",
+        "max_len" : 0,
+        "require" : false
+      },
+      "lng" : {
+        "type" : "float",
+        "desc" : "纬度",
+        "max_len" : 0,
+        "require" : false
+      },
+      "main_image" : {
+        "type" : "file",
+        "desc" : "封面图片文件",
+        "max_len" : 0,
+        "require" : false
+      },
+      "group_image" : {
+        "type" : "file",
+        "desc" : "群组二维码图片文件",
+        "max_len" : 0,
+        "require" : false
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功修改会议",
+        "data" : {}
+      },
+      {
+        "errcode" : 120001
+      },
+      {
+        "errcode" : 120005
+      },
+      {
+        "errcode" : 120006
+      }
+    ]
+  },
+
+  {
+    "controller" : "lecture",
+    "method" : "get",
+    "rule" : "qr_code/:lectureId",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "getQRCodeUrl",
+    "name" : "获取签到二维码图片",
+    "desc" : "",
+    "permission" : null,
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "desc" : "会议id",
+        "max_len" : 11,
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取签到二维码图片",
+        "data" : {
+          "url" : ["string", "二维码图片url"]
+        }
+      },
+      {
+        "errcode" : 120001
+      }
+    ]
+  },
+
+  {
+    "controller" : "lecture",
+    "method" : "get",
+    "rule" : ":lectureId/enter_fields",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "getEnterFields",
+    "name" : "获取报名填写字段",
+    "desc" : "返回的数组中，键名对应的是英文名，键值对应的是中文名",
+    "permission" : null,
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "desc" : "会议id",
+        "max_len" : 11,
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取会议报名必填字段",
+        "data" : {
+          "require_fields" : ["array", "会议报名必填字段"],
+          "optional_fields" : ["array", "会议报名选填字段"]
+        }
+      },
+      {
+        "errcode" : 120001
+      },
+      {
+        "errcode" : 120007
+      }
+    ]
+  },
+
+  {
+    "controller" : "lecture",
+    "method" : "get",
+    "rule" : ":lectureId/relative",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "getRelativePictures",
+    "name" : "获取会议关联图片",
+    "desc" : "",
+    "permission" : null,
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "desc" : "会议id",
+        "max_len" : 11,
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取会议关联图片",
+        "data" : {
+          "id" : ["int", "图片关联id"],
+          "image_info" : ["array", "图片信息"]
+        }
+      },
+      {
+        "errcode" : 120008
+      }
+    ]
+  },
+  {
+    "controller" : "lecture",
+    "method" : "post",
+    "rule" : ":lectureId/relative",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "addRelativePicture",
+    "name" : "添加会议关联图片",
+    "desc" : "",
+    "permission" : "USER",
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "desc" : "会议id",
+        "max_len" : 11,
+        "require" : true
+      }
+    },
+    "post" : {},
+    "response" : [
+      {
+        "code" : 201,
+        "message" : "成功添加会议关联图片",
+        "data" : {}
+      },
+      {
+        "errcode": 120005
+      }
+    ]
+  },
+
+  {
+    "controller" : "lecture",
+    "method" : "delete",
+    "rule" : ":lectureId/relative/:lectureImageId",
+    "rule_pattern" : {
+      "lectureId" : "@id",
+      "lectureImageId" : "@id"
+    },
+    "route": "deleteRelativePicture",
+    "name" : "删除会议关联图片",
+    "desc" : "",
+    "permission" : "USER",
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "desc" : "会议id",
+        "max_len" : 11,
+        "require" : true
+      },
+      "lectureImageId" : {
+        "type": "int",
+        "desc": "图片关联id",
+        "max_len": 11,
+        "require": true
+      }
+    },
+    "post" : {},
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功删除会议关联图片",
+        "data" : {}
+      },
+      {
+        "errcode" : 120005
+      },
+      {
+        "errcode" : 120009
+      }
+    ]
+  }
+]

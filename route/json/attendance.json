@@ -1,0 +1,394 @@
+[
+  {
+    "controller" : "attendance",
+    "method" : "get",
+    "rule" : ":lectureId",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "getAllOfLecture",
+    "name" : "获取指定会议的嘉宾",
+    "permission" : null,
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "max_len" : 11,
+        "desc" : "会议id",
+        "require" : true
+      },
+      "page" : {
+        "type" : "int",
+        "max_len" : 6,
+        "desc" : "页码",
+        "require" : false,
+        "default" : 1
+      },
+      "row" : {
+        "type" : "int",
+        "max_len" : 6,
+        "desc" : "每页条数",
+        "require" : false,
+        "default" : 5
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取指定会议的嘉宾",
+        "data" : {
+          "id" : ["int", "嘉宾id"],
+          "user_info" : ["array", "用户信息"]
+        }
+      },
+      {"errcode" :  160001}
+    ]
+  },
+
+  {
+    "controller" : "attendance",
+    "method" : "get",
+    "rule" : "enter/:lectureId",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "checkEnter",
+    "name" : "查询用户是否已报名",
+    "permission" : "USER",
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "max_len" : 11,
+        "desc" : "会议id",
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功查询用户是否已报名",
+        "data" : {
+          "enter" : ["bool", "嘉宾是否报名"],
+          "paid" : ["bool", "是否已付款"]
+        }
+      }
+    ]
+  },
+
+  {
+    "controller" : "attendance",
+    "method" : "post",
+    "rule" : ":lectureId",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "enter",
+    "name" : "用户报名参加会议",
+    "permission" : "USER",
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "max_len" : 11,
+        "desc" : "会议id",
+        "require" : true
+      }
+    },
+    "post" : {
+      "name" : {
+        "type" : "string",
+        "max_len" : 20,
+        "desc" : "姓名",
+        "require" : false
+      },
+      "telephone" : {
+        "type" : "int",
+        "max_len" : 11,
+        "desc" : "手机号码",
+        "require" : false,
+        "validate" : {
+          "tel" : "这不是一个合法的手机号码"
+        }
+      },
+      "address" : {
+        "type" : "string",
+        "max_len" : 100,
+        "desc" : "联系地址",
+        "require" : false
+      },
+      "email" : {
+        "type" : "string",
+        "max_len" : 100,
+        "desc" : "邮箱",
+        "require" : false,
+        "validate" : {
+          "email" : "这不是一个合法的邮箱"
+        }
+      },
+      "qq" : {
+        "type" : "int",
+        "max_len" : 20,
+        "desc" : "QQ号码",
+        "require" : false
+      },
+      "wechat" : {
+        "type" : "string",
+        "max_len" : 50,
+        "desc" : "微信号",
+        "require" : false
+      },
+      "school" : {
+        "type" : "string",
+        "max_len" : 50,
+        "desc" : "学校名",
+        "require" : false
+      },
+      "grade" : {
+        "type" : "string",
+        "max_len" : 20,
+        "desc" : "年级",
+        "require" : false
+      },
+      "class" : {
+        "type" : "string",
+        "max_len" : 20,
+        "desc" : "班级",
+        "require" : false
+      },
+      "student_number" : {
+        "type" : "string",
+        "max_len" : 50,
+        "desc" : "学号",
+        "require" : false
+      },
+      "age" : {
+        "type" : "int",
+        "max_len" : 10,
+        "desc" : "年龄",
+        "require" : false
+      },
+      "gender" : {
+        "type" : "int",
+        "max_len" : 1,
+        "desc" : "性别：1位男性，0为女性",
+        "require" : false
+      },
+      "company" : {
+        "type" : "string",
+        "max_len" : 50,
+        "desc" : "所属公司",
+        "require" : false
+      },
+      "apartment" : {
+        "type" : "string",
+        "max_len" : 50,
+        "desc" : "所属部门",
+        "require" : false
+      },
+      "occupation" : {
+        "type" : "string",
+        "max_len" : 50,
+        "desc" : "职业",
+        "require" : false
+      },
+      "job_number" : {
+        "type" : "string",
+        "max_len" : 50,
+        "desc" : "工号",
+        "require" : false
+      },
+      "remark" : {
+        "type" : "string",
+        "max_len" : 500,
+        "desc" : "备注",
+        "require" : false
+      }
+    },
+    "response" : [
+      {
+        "code" : 201,
+        "message" : "用户成功报名参加会议",
+        "data" : {}
+      },
+      {
+        "code" : 201,
+        "message" : "成功预留名额，等待付款",
+        "data" : {
+          "appId" : ["string", "appId"],
+          "timestamp" : ["int", "当前时间戳"],
+          "noneStr" : ["string", "随机字符串"],
+          "package" : ["string", "prepay_id"],
+          "signType" : ["string", "签名算法"]
+        }
+      },
+      {"errcode" : 140019}
+    ]
+  },
+
+  {
+    "controller" : "attendance",
+    "method" : "put",
+    "rule" : "check_in/:lectureId",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "checkIn",
+    "name" : "嘉宾签到",
+    "permission" : "USER",
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "max_len" : 11,
+        "desc" : "会议id",
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "签到成功",
+        "data" : {}
+      },
+      {"errcode" : 140010},
+      {"errcode" : 140011},
+      {"errcode" : 140012},
+      {"errcode" : 140013},
+      {"errcode" : 140014}
+    ]
+  },
+
+  {
+    "controller" : "attendance",
+    "method" : "get",
+    "rule" : "lectures",
+    "route": "getPersonalLectures",
+    "name" : "获取用户报名的会议",
+    "permission" : "USER",
+    "param" : {
+      "page" : {
+        "type" : "int",
+        "max_len" : 6,
+        "desc" : "页码",
+        "require" : false,
+        "default" : 1
+      },
+      "row" : {
+        "type" : "int",
+        "max_len" : 6,
+        "desc" : "每页条数",
+        "require" : false,
+        "default" : 5
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取用户报名的会议",
+        "data" : {
+          "id" : ["int", "嘉宾表单id(见数据库)"],
+          "lecture_info" : ["array", "会议信息"],
+          "enter_count" : ["int", "报名总人数"],
+          "check_in_count" : ["int", "已签到人数"]
+        }
+      },
+      {"errcode": 140015}
+    ]
+  },
+
+  {
+    "controller" : "attendance",
+    "method" : "get",
+    "rule" : "user/:lectureId",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "getInfo",
+    "name" : "获取在指定会议中的报名信息",
+    "permission" : null,
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "max_len" : 11,
+        "desc" : "会议id",
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取在指定会议中的报名信息",
+        "data" : {}
+      },
+      {"errcode": 140010}
+    ]
+  },
+
+  {
+    "controller" : "attendance",
+    "method" : "delete",
+    "rule" : "cancel/:lectureId",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "cancel",
+    "name" : "取消报名保留名额",
+    "permission" : "USER",
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "max_len" : 11,
+        "desc" : "会议id",
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功取消报名保留名额",
+        "data" : {}
+      },
+      {"errcode": 140016},
+      {"errcode": 140017},
+      {"errcode": 140018}
+    ]
+  },
+
+  {
+    "controller" : "attendance",
+    "method" : "get",
+    "rule" : "count/:lectureId",
+    "rule_pattern" : {
+      "lectureId" : "@id"
+    },
+    "route": "getCount",
+    "name" : "获取会议的报名人数和签到人数",
+    "permission" : "USER",
+    "param" : {
+      "lectureId" : {
+        "type" : "int",
+        "max_len" : 11,
+        "desc" : "会议id",
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取会议的报名人数和签到人数",
+        "data" : {
+          "enter_count" : ["int", "报名总人数"],
+          "check_in_count" : ["int", "已签到人数"]
+        }
+      },
+      {"errcode": 140012}
+    ]
+  },
+
+  {
+    "controller" : "attendance",
+    "method" : "delete",
+    "rule" : ":lectureId",
+    "route": "recallEnter",
+    "name" : "取消报名会议",
+    "desc" : "【暂时未开放】这个接口涉及到退款",
+    "permission" : "USER"
+  }
+]

@@ -1,0 +1,53 @@
+
+// 一个完整的路由信息如下
+{
+  "controller" : "控制器名/模块名",
+  "method" : "请求方法，常见的有get, post, put, delete",
+  "rule" : "路由规则",
+  "route": "路由地址（后台）",
+  "name" : "接口名称",
+  "desc" : "接口的简要说明",
+  "permission" : "使用该接口的最低权限，默认为null。最低权限不为null时该方法需要令牌",
+  "param" : {
+    // HTTP Request param
+    "参数键名" : {
+      // 参数内容
+      "type" : "参数类型，有string, bool, int, float, file",
+      "max_len" : "参数值最大长度",
+      "desc" : "参数描述",
+      "require" : "参数是否必要",
+      "validate": {
+        // 验证内容
+        "验证方法" : "验证失败后返回的描述（message）"
+      }
+    }
+  },
+  "post" : {
+    // HTTP Request body
+    // 与param类似，只是传递的方法不同
+  },
+  "response" : [
+    // 响应
+
+    // 成功响应范例
+    {
+      "success" : "布尔值，是否成功的相应",
+      "code" : "Http status code",
+      "message" : "成功消息",
+      "data" : [
+        // 相应返回的数据及其描述
+        {
+          "返回值键名1" : ["类型", "描述"],
+          "返回值键名2" : ["类型", "描述"]
+        }
+      ]
+    },
+
+    // 错误响应范例
+    {
+      "success" : "布尔值，是否成功的相应",
+      "errcode" : "错误码，对应的错误码包含code和message，因此错误响应不需要写message和code",
+      "data" : []
+    }
+  ]
+}

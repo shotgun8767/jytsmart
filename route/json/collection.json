@@ -1,0 +1,132 @@
+[
+  {
+    "controller" : "collection",
+    "method" : "get",
+    "rule" : ":type",
+    "rule_pattern" : {
+      "type" : "@id"
+    },
+    "route": "get",
+    "name" : "获取收藏",
+    "desc" : "各种收藏类型需要返回哪些字段，请与后端负责人反映需求",
+    "permission" : "USER",
+    "param" : {
+      "type" : {
+        "type" : "int",
+        "max_len" : 1,
+        "desc" : "类型：1为用户，2位名片，3为会议",
+        "require" : true
+      },
+      "page" : {
+        "type" : "int",
+        "max_len" : 6,
+        "desc" : "页码",
+        "require" : false,
+        "default" : 1
+      },
+      "row" : {
+        "type" : "int",
+        "max_len" : 6,
+        "desc" : "每页条数",
+        "require" : false,
+        "default" : 5
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取收藏",
+        "data" : {
+          "user_info" : ["array", "用户信息。当type=1时返回"],
+          "card_info" : ["array", "名片信息。当type=2时返回"],
+          "lecture_info" : ["array", "会议信息。当type=3时返回"]
+        }
+      },
+      {
+        "errcode" : 170001
+      },
+      {
+        "errcode" : 170002
+      }
+    ]
+  },
+
+  {
+    "controller" : "collection",
+    "method" : "post",
+    "rule" : "",
+    "route": "add",
+    "name" : "添加收藏",
+    "desc" : "当收藏存在时，返回的也是成功的响应",
+    "permission" : "USER",
+    "post" : {
+      "type" : {
+        "type" : "int",
+        "max_len" : 1,
+        "desc" : "类型：1为用户，2位名片，3为会议",
+        "require" : true
+      },
+      "foreign_id" : {
+        "type" : "int",
+        "max_len" : 11,
+        "desc" : "对象id",
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 201,
+        "message" : "成功添加收藏",
+        "data" : {
+          "collection_id" : ["int", "收藏id"]
+        }
+      },
+      {
+        "errcode" : 170001
+      },
+      {
+        "errcode" : 170003
+      }
+    ]
+  },
+
+  {
+    "controller" : "collection",
+    "method" : "delete",
+    "rule" : ":collectionId",
+    "rule_pattern" : {
+      "collectionId" : "@id"
+    },
+    "route": "delete",
+    "name" : "删除收藏",
+    "permission" : "USER",
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功删除收藏",
+        "data" : {}
+      },
+      {
+        "errcode" : 170001
+      },
+      {
+        "errcode" : 170005
+      }
+    ]
+  },
+
+  {
+    "controller" : "collection",
+    "method" : "delete",
+    "rule" : ":type/:foreignId",
+    "rule_pattern" : {
+      "type" : "@id",
+      "foreignId" : "@id"
+    },
+    "route": "deleteByForeignId",
+    "name" : "根据对象id删除收藏记录",
+    "desc" : "我觉得这个接口没什么必要，就没写，前端若觉得需要，请及时联系后端负责人",
+    "permission" : "USER",
+    "response" : []
+  }
+]

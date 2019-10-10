@@ -1,0 +1,98 @@
+[
+{
+  "controller" : "attendance",
+  "method" : "get",
+  "rule" : "all/:lectureId",
+  "route": "getAllAttendance",
+  "name" : "获取某会议的全部嘉宾",
+  "desc" : "",
+  "permission" : "USER",
+  "param" : {},
+  "post" : {},
+  "response" : []
+},
+{
+  "controller" : "attendance",
+  "method" : "get",
+  "rule" : "check/:lectureId",
+  "route": "checkEnter",
+  "name" : "查询客户端用户是否已报名某会议",
+  "desc" : "",
+  "permission" : "USER",
+  "param" : {},
+  "post" : {},
+  "response" : []
+},
+{
+  "controller" : "attendance",
+  "method" : "post",
+  "rule" : "enter",
+  "route": "enter",
+  "name" : "客户端用户报名参加会议",
+  "desc" : "",
+  "permission" : "USER",
+  "param" : {},
+  "post" : {},
+  "response" : []
+},
+{
+  "controller" : "attendance",
+  "method" : "put",
+  "rule" : "checkIn/:lectureId",
+  "route": "checkIn",
+  "name" : "嘉宾签到",
+  "desc" : "",
+  "permission" : "USER",
+  "param" : {},
+  "post" : {},
+  "response" : []
+},
+{
+  "controller" : "attendance",
+  "method" : "get",
+  "rule" : "user",
+  "route": "getPersonalLectures",
+  "name" : "获取客户端用户报名的全部会议",
+  "desc" : "",
+  "permission" : "USER",
+  "param" : {},
+  "post" : {},
+  "response" : []
+},
+{
+  "controller" : "attendance",
+  "method" : "delete",
+  "rule" : ":lectureId",
+  "route": "recallEnter",
+  "name" : "取消报名会议",
+  "desc" : "",
+  "permission" : "USER",
+  "param" : {},
+  "post" : {},
+  "response" : []
+},
+{
+  "controller" : "attendance",
+  "method" : "delete",
+  "rule" : "cancelReservation/:lectureId",
+  "route": "cancelReservation",
+  "name" : "参与会议但未付钱（删除报名保留名额）",
+  "desc" : "",
+  "permission" : "USER",
+  "param" : {},
+  "post" : {},
+  "response" : []
+},
+{
+  "controller" : "attendance",
+  "method" : "get",
+  "rule" : "user/:lectureId/:userId",
+  "route": "getUserInfo",
+  "name" : "获取指定嘉宾在指定会议中的报名信息",
+  "desc" : "",
+  "permission" : "USER",
+  "param" : {},
+  "post" : {},
+  "response" : []
+}
+]

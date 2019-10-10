@@ -1,0 +1,29 @@
+[
+  {
+    "controller" : "tag",
+    "method" : "get",
+    "rule" : "",
+    "route": "get",
+    "name" : "获取标签",
+    "permission" : null,
+    "param" : {
+      "limit" : {
+        "type" : "int",
+        "desc" : "标签数量",
+        "max_len" : 6,
+        "require" : false,
+        "default" : null
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功获取标签",
+        "data" : {
+          "id" : ["int", "标签id"],
+          "name" : ["string", "标签名称"]
+        }
+      }
+    ]
+  }
+]
