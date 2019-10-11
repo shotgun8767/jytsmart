@@ -65,7 +65,7 @@ class Wx extends BaseApi
 
         return $this
             ->setMethod('Token', 'get', 'v1')
-            ->setParam(['payload' => $payload, $permission = 'USER'])
+            ->setParam(['payload' => $payload, 'permission' => 'USER'])
             ->call();
     }
 
@@ -120,6 +120,7 @@ class Wx extends BaseApi
             (new Attendance)->updatePaid($number);
         } else {
             # 支付失败
+            echo 'error';
         }
 
         $response = [
