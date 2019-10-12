@@ -6,7 +6,7 @@ use app\exception\CardException;
 
 class Card extends BaseModel
 {
-    protected $hidden = ['id', 'status', 'image_id', 'user_id'];
+    protected $hidden = ['status', 'image_id', 'user_id'];
 
     /**
      * 获取用户名片

@@ -28,5 +28,39 @@
         "errcode" : 130001
       }
     ]
+  },
+
+  {
+    "controller" : "image",
+    "method" : "get",
+    "rule" : ":imageId",
+    "rule_pattern" : {
+      "imageId" : "@id"
+    },
+    "route": "get",
+    "param" : {
+      "imageId" : {
+        "type" : "int",
+        "desc" : "图片id",
+        "max_len" : 11,
+        "require" : true
+      }
+    },
+    "name" : "获取图片信息",
+    "permission" : "ADMIN",
+    "response" : [
+      {
+        "code" : 201,
+        "message" : "成功获取图片信息",
+        "data" : {
+          "image_url" : ["string", "图片url"]
+        }
+      },
+
+      {
+        "errcode" : 130002
+      }
+    ]
   }
+
 ]

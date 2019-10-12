@@ -28,6 +28,7 @@
         "code" : 200,
         "message" : "成功获取用户名片",
         "data" : {
+          "id" : ["int", "名片id"],
           "image_info" : ["array", "名片图像信息"]
         }
       },

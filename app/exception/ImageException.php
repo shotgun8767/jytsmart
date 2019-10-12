@@ -13,6 +13,7 @@ class ImageException extends BaseException
     ];
 
     protected $errcodes = [
-        130001 => [HttpCode::SC_INTERNAL_SERVER_ERROR, '上传图片失败!'],
+        130001 => [HttpCode::SC_INTERNAL_SERVER_ERROR, '上传图片失败！'],
+        130002 => [HttpCode::SC_NOT_FOUND, '图片不存在！'],
     ];
 }

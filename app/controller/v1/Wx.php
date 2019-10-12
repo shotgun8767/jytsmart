@@ -59,13 +59,16 @@ class Wx extends BaseApi
 
         # 返回Token
         $payload = [
-            'id' => $id,
+            'uid' => $id,
             'sk' => $result['session_key']
         ];
 
         return $this
             ->setMethod('Token', 'get', 'v1')
-            ->setParam(['payload' => $payload, 'permission' => 'USER'])
+            ->setParam([
+                'payload' => $payload,
+                'permission' => 'USER',
+            ])
             ->call();
     }
 

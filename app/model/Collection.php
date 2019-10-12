@@ -15,7 +15,7 @@ class Collection extends BaseModel
     const TYPE_CARD     = 2;
     const TYPE_LECTURE  = 3;
 
-    protected $hidden = ['id', 'status', 'foreign_id', 'user_id', 'collection_type'];
+    protected $hidden = ['status', 'foreign_id', 'user_id', 'collection_type'];
 
     /**
      * 根据类型获取收藏
@@ -31,7 +31,7 @@ class Collection extends BaseModel
             case self::TYPE_USER    :
                 $with = ['UserInfo' => function ($query) {
                     /** @var BaseQuery $query */
-                    $query->field(['id', 'name', 'avatar_url']);
+                    $query->field(['id', 'name', 'avatar_url', 'occupation']);
                 }];
                 break;
             case self::TYPE_CARD    :
