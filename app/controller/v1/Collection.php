@@ -59,4 +59,14 @@ class Collection extends BaseApi
             Package::ok('成功删除收藏') :
             Package::error(CollectionException::class, 170004);
     }
+
+    public function deleteByForeignId(int $type, int $foreignId) : Package
+    {
+        $userId = $this->token()->payload('uid');
+        $res = (new model)->deleteByForeignId($userId, $type, $foreignId);
+
+        return $res ?
+            Package::ok('成功删除收藏') :
+            Package::error(CollectionException::class, 170004);
+    }
 }

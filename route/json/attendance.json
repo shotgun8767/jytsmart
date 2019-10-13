@@ -8,7 +8,7 @@
     },
     "route": "getAllOfLecture",
     "name" : "获取指定会议的嘉宾",
-    "permission" : null,
+    "permission" : "USER",
     "param" : {
       "lectureId" : {
         "type" : "int",
@@ -37,7 +37,9 @@
         "message" : "成功获取指定会议的嘉宾",
         "data" : {
           "id" : ["int", "嘉宾id"],
-          "user_info" : ["array", "用户信息"]
+          "user_info" : ["array", "用户信息"],
+          "check_in" : ["bool", "用户是否已签到"],
+          "is_subscribed" : ["bool", "客户端用户是否已关注嘉宾"]
         }
       },
       {"errcode" :  160001}
@@ -360,7 +362,7 @@
     },
     "route": "getCount",
     "name" : "获取会议的报名人数和签到人数",
-    "permission" : "USER",
+    "permission" : null,
     "param" : {
       "lectureId" : {
         "type" : "int",

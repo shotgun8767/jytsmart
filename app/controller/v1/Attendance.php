@@ -18,7 +18,8 @@ class Attendance extends BaseApi
      */
     public function getAllOfLecture(int $lectureId, int $page, int $row) : Package
     {
-        $res = (new model)->getAllOfLecture($lectureId, $page, $row);
+        $userId = $this->token()->payload('uid');
+        $res = (new model)->getAllOfLecture($userId, $lectureId, $page, $row);
 
         return $res ?
             Package::ok('成功获取指定会议的嘉宾', $res) :

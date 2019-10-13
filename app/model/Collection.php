@@ -3,7 +3,6 @@
 namespace app\model;
 
 use app\exception\CollectionException;
-use app\exception\LectureException;
 use think\db\BaseQuery;
 
 class Collection extends BaseModel
@@ -101,6 +100,44 @@ class Collection extends BaseModel
         }
 
         return $this->refreshQuery()->softDelete($collectionId);
+    }
+
+    /**
+     * @param int $userId
+     * @param int $type
+     * @param int $foreignId
+     * @return bool
+     */
+    public function recordExists(int $userId, int $type, int $foreignId) : bool
+    {
+        if (!in_array($type, [1, 2, 3])) {
+            throw new CollectionException(170001);
+        }
+
+        return $this->get([
+            'user_id' => $userId,
+            'collection_type' => $type,
+            'foreign_id' => $foreignId
+        ]) ? true : false;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $type
+     * @param int $foreignId
+     * @return int
+     */
+    public function deleteByForeignId(int $userId, int $type, int $foreignId) : int
+    {
+        if (!in_array($type, [1, 2, 3])) {
+            throw new CollectionException(170001);
+        }
+
+        return $this->softDelete([
+            'user_id' => $userId,
+            'collection_type' => $type,
+            'foreign_id' => $foreignId
+        ]);
     }
 
     public function UserInfo()

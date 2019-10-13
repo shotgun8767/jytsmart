@@ -110,6 +110,9 @@
         "errcode" : 170001
       },
       {
+        "errcode" : 170004
+      },
+      {
         "errcode" : 170005
       }
     ]
@@ -124,9 +127,34 @@
       "foreignId" : "@id"
     },
     "route": "deleteByForeignId",
-    "name" : "根据对象id删除收藏记录",
-    "desc" : "我觉得这个接口没什么必要，就没写，前端若觉得需要，请及时联系后端负责人",
+    "name" : "删除收藏(根据对象id)",
     "permission" : "USER",
-    "response" : []
+    "param" : {
+      "type" : {
+        "type" : "int",
+        "max_len" : 1,
+        "desc" : "类型：1为用户，2位名片，3为会议",
+        "require" : true
+      },
+      "foreign_id" : {
+        "type" : "int",
+        "max_len" : 11,
+        "desc" : "对象id",
+        "require" : true
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功删除收藏",
+        "data" : {}
+      },
+      {
+        "errcode" : 170001
+      },
+      {
+        "errcode" : 170004
+      }
+    ]
   }
 ]

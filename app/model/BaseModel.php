@@ -102,7 +102,7 @@ class BaseModel extends Model
 
     /**
      * 刷新查询
-     * @return BaseModel
+     * @return static
      */
     public function refreshQuery() : self
     {

@@ -13,29 +13,38 @@ class Attendance extends BaseModel
     const CHECK_IN = 1;
     const NOT_CHECK_IN = 0;
 
-    protected $hidden = ['status', 'user_id', 'lecture_id'];
+    protected $hidden = ['status', 'user_id'];
 
     /**
      * 获取指定会议的嘉宾
+     * @param $userId
      * @param int $lectureId
      * @param int $page
      * @param int $row
      * @return array|null
      */
-    public function getAllOfLecture(int $lectureId, int $page, int $row) : ?array
+    public function getAllOfLecture(int $userId, int $lectureId, int $page, int $row) : ?array
     {
-        $fields = ['id', 'user_id'];
+        $fields = ['id', 'user_id', 'check_in'];
 
         $with = ['UserInfo' => function ($query) {
             /** @var BaseQuery $query */
-            $query->field(['id', 'name', 'avatar_url']);
+            $query->field(['id', 'name', 'avatar_url', 'occupation']);
         }];
 
-        return $this
+        $res = $this
             ->multi()
             ->page($page, $row)
             ->baseWith($with)
-            ->getArray(['lecture_id' => $lectureId], $fields);
+            ->get(['lecture_id' => $lectureId], $fields);
+
+        $Collection = new Collection;
+        $res->map(function ($value) use ($userId, $Collection){
+           $foreignId = $value['user_id'];
+           $value['is_subscribed'] = $Collection->refreshQuery()->recordExists($userId, $Collection::TYPE_USER, $foreignId);
+        });
+
+        return $res->toArray();
     }
 
     /**
@@ -319,6 +328,18 @@ class Attendance extends BaseModel
                 ->getCount(['lecture_id' => $lectureId, 'check_in' => self::CHECK_IN]),
         ];
     }
+
+    /**
+     * 用户是否参加会议
+     * @param int $userId
+     * @param int $lectureId
+     * @return bool
+     */
+    public function isEnter(int $userId, int $lectureId) : bool
+    {
+        return $this->get(['user_id' => $userId, 'lecture_id' => $lectureId]) ? true : false;
+    }
+
 
     /**
      * 更新支付状态
