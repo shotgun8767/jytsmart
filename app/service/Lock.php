@@ -21,16 +21,24 @@ class Lock
     public function __construct()
     {
         $this->file = config('setting.lock.filepath');
+        $this->fp = fopen($this->file, 'w+');
     }
 
     /**
-     * 锁死文件
+     * 文件上锁
      * @return bool 是否成功锁上文件
      */
     public function flock() : bool
     {
-        $this->fp = fopen($this->file, 'w+');
         return flock($this->fp, LOCK_EX);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFlock() : bool
+    {
+        return !is_writable($this->file);
     }
 
     /**
@@ -42,7 +50,7 @@ class Lock
         @fclose($this->fp);
     }
 
-    protected function __destruct()
+    public function __destruct()
     {
         $this->release();
     }

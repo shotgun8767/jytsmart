@@ -377,11 +377,15 @@ class BaseModel extends Model
     public function destroys($where = []) : int
     {
         $this->parseWhere($where);
-
         $this->whereBase($where);
+
         return $this->queryDelete();
     }
 
+    /**
+     * @param $with
+     * @return BaseModel
+     */
     public function baseWith($with) : self
     {
         $this->getQuery()->with($with);
@@ -516,10 +520,10 @@ class BaseModel extends Model
     protected function queryDelete(array $where = []) : int
     {
         if (is_debug()) {
-            return $this->getQuery()->destroys($where);
+            return $this->getQuery()->where($where)->delete();
         } else {
             try {
-                return $this->getQuery()->destroys($where);
+                return $this->getQuery()->where($where)->delete();
             } catch (Exception $e) {
                 throw new DataBaseException(20005);
             }

@@ -15,11 +15,12 @@ class Lecture extends BaseApi
      * @param int $page
      * @param int $row
      * @param null|int $tag_id
+     * @param null|string $month
      * @return Package
      */
-    public function getPublic(int $page, int $row, ?int $tag_id = null) : Package
+    public function getPublic(int $page, int $row, ?int $tag_id = null, ?string $month = null) : Package
     {
-        $res = (new model)->getPublic($page, $row, $tag_id);
+        $res = (new model)->getPublic($page, $row, $tag_id, $month);
 
         return $res ?
             Package::ok('成功获取公共会议', $res) :
@@ -32,11 +33,12 @@ class Lecture extends BaseApi
      * @param int $row
      * @param int $userId
      * @param null|int $tag_id
+     * @param null|string $month
      * @return Package
      */
-    public function getPrivate(int $page, int $row, int $userId, ?int $tag_id = null) : Package
+    public function getPrivate(int $page, int $row, int $userId, ?int $tag_id = null, ?string $month = null) : Package
     {
-        $res = (new model)->getPrivate($page, $row, $userId, $tag_id);
+        $res = (new model)->getPrivate($page, $row, $userId, $tag_id, $month);
 
         return $res ?
             Package::ok('成功获取私人会议', $res) :

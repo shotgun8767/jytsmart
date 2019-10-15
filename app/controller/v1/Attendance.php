@@ -83,12 +83,13 @@ class Attendance extends BaseApi
      * 获取用户报名的会议
      * @param int $page
      * @param int $row
+     * @param null|string $month
      * @return Package
      */
-    public function getPersonalLectures(int $page, int $row) : Package
+    public function getPersonalLectures(int $page, int $row, ?string $month = null) : Package
     {
         $userId = $this->token()->payload('uid');
-        $res = (new model)->getPersonalLectures($userId, $page, $row);
+        $res = (new model)->getPersonalLectures($userId, $page, $row, $month);
 
         return $res ?
             Package::ok('成功获取用户报名的会议', $res) :

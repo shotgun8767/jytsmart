@@ -23,38 +23,6 @@ if (!function_exists('scene')) {
     };
 }
 
-if (!function_exists('arrayToXml')) {
-    /**
-     * 将数组转化为XML
-     * @param $arr
-     * @return string
-     */
-    function arrayToXml(?array $arr) : string
-    {
-        $xml = "<xml>";
-        foreach ($arr as $key => $val){
-            $xml .= is_array($val) ?
-                "<{$key}>" . arrayToXml($val) . "</{$key}>" :
-                "<{$key}>$val</{$key}>";
-        }
-
-        return $xml . "</xml>";
-    }
-}
-
-if (!function_exists('xmlToArray')) {
-    /**
-     * 将XML转化为数组
-     * @param $xml
-     * @return mixed
-     */
-    function xmlToArray(?string $xml) : array
-    {
-        return json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
-    }
-}
-
-
 if (!function_exists('begin')) {
     /**
      * 开始计时

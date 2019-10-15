@@ -40,8 +40,8 @@ class Attendance extends BaseModel
 
         $Collection = new Collection;
         $res->map(function ($value) use ($userId, $Collection){
-           $foreignId = $value['user_id'];
-           $value['is_subscribed'] = $Collection->refreshQuery()->recordExists($userId, $Collection::TYPE_USER, $foreignId);
+            $foreignId = $value['user_id'];
+            $value['is_subscribed'] = $Collection->refreshQuery()->recordExists($userId, $Collection::TYPE_USER, $foreignId);
         });
 
         return $res->toArray();
@@ -106,7 +106,7 @@ class Attendance extends BaseModel
         }
 
         # 校验必填字段
-        $requireFields = array_map('trim', explode(',', $info['require_fields']));
+        $requireFields = array_flip(array_map('trim', explode(',', $info['require_fields'])));
         if (array_intersect_key($requireFields, $data) != $requireFields) {
             throw new AttendanceException(140006);
         }
@@ -120,8 +120,9 @@ class Attendance extends BaseModel
         # 清除保留名额
         $this->clearReservation($lectureId);
 
-        while ($times < 1000) {
-            if ($Lock->flock()) {
+        while ($times < 100) {
+            if (!$Lock->isFlock()) {
+                $Lock->flock();
                 $capacity = $Lecture
                     ->refreshQuery()
                     ->getField('capacity', $lectureId);
@@ -136,15 +137,45 @@ class Attendance extends BaseModel
                 }
 
                 # 报名
-                $data['create_time'] = time();
-                $data['user_id'] = $userId;
-                $id = $this
-                    ->refreshQuery()
-                    ->inserts($data, false, $isCharge ? 'NOT_PAID' : 'NORMAL');
-                if (!$isCharge) return $id;
+                $data['create_time']    = time();
+                $data['user_id']        = $userId;
+                $data['lecture_id']     = $lectureId;
+
+                if (!$isCharge) {
+                    return $this
+                        ->refreshQuery()
+                        ->inserts($data, false, $isCharge ? 'NOT_PAID' : 'NORMAL');
+                }
+
+                $this->getQuery()->startTrans();
+
+                try {
+                    # 调用支付接口
+                    $WxPay = new WxPay;
+                    $enterConfig = config('setting.enter');
+                    $body = $enterConfig['order_body'];
+                    $detail = $enterConfig['order_detail'];
+                    $attach = $enterConfig['order_attach'];
+
+                    $order = $WxPay->generateOrder($userId, $WxPay::ACTION_ENTER, $enterFee, $body, $detail, $attach);
+                    $prepayId = $WxPay->getPrepayId($order);
+                    $_data = [
+                        'number' => $order['out_trade_no'],
+                        'pay' => 0,
+                        'fee' => $enterFee
+                    ];
+                    (new Order)->inserts($_data);
+                    $this->refreshQuery()->updates($id, ['order' => $order['out_trade_order']]);
+
+                    $res = $WxPay->reSign($prepayId);
+                    return $res;
+                } catch (\Exception $e) {
+                    $this->getQuery()->rollback();
+                    throw $e;
+                }
             } else {
-                // 停滞10毫秒
-                usleep(10000);
+                // 停滞100毫秒
+                usleep(1000);
                 $times++;
             }
         }
@@ -155,28 +186,7 @@ class Attendance extends BaseModel
         }
 
         # 报名失败
-        if (!$id) {
-            throw new AttendanceException(140009);
-        }
-
-        # 调用支付接口
-        $WxPay = new WxPay;
-        $enterConfig = config('setting.enter');
-        $body = $enterConfig['order_body'];
-        $detail = $enterConfig['order_detail'];
-        $attach = $enterConfig['order_attach'];
-
-        $order = $WxPay->generateOrder($userId, $WxPay::ACTION_ENTER, $enterFee, $body, $detail, $attach);
-        $prepayId = $WxPay->getPrepayId($order);
-        $_data = [
-            'number' => $order['out_trade_no'],
-            'pay' => 0,
-            'fee' => $enterFee
-        ];
-        (new Order)->inserts($_data);
-        $this->refreshQuery()->updates($id, ['order' => $order['out_trade_order']]);
-
-        return $WxPay->reSign($prepayId);
+        throw new AttendanceException(140009);
     }
 
     /**
@@ -224,9 +234,10 @@ class Attendance extends BaseModel
      * @param int $userId
      * @param int $page
      * @param int $row
+     * @param null|string $month
      * @return array|null
      */
-    public function getPersonalLectures(int $userId, int $page, int $row) : ?array
+    public function getPersonalLectures(int $userId, int $page, int $row, ?string $month = null) : ?array
     {
         $with = [
             'LectureInfo' => function ($query) {
@@ -236,12 +247,37 @@ class Attendance extends BaseModel
             }
         ];
 
+        $this->baseJoin('a', [
+            'lecture' => [
+                'alias' => 'l',
+                'condition' => 'a.lecture_id=l.id',
+            ]
+        ]);
+
+        $where = [
+            ['a.user_id', '=', $userId],
+            ['l.status', '=', 1],
+        ];
+
+        if ($month) {
+            $month      = explode('-', $month);
+            $month[1]   = (int) $month[1];
+            array_push($month, 1);
+            $end        = $month; $end[1]++;
+
+            $where = array_merge($where, [
+                ['l.start', '>=', strtotime(implode('-', $month))],
+                ['l.end', '<', strtotime(implode('-', $end))]
+            ]);
+
+        }
+
         $return = $this
             ->multi()
-            ->page($page, $row)
             ->baseWith($with)
-            ->order(['id' => 'DESC'])
-            ->getArray(['user_id' => $userId], ['id', 'lecture_id']);
+            ->page($page, $row)
+            ->order(['listorder' => 'DESC', 'id' => 'DESC'])
+            ->getArray($where, ['a.id', 'a.lecture_id']);
 
         return array_map(function ($array) {
             if (!$lectureId = $array['lecture_info']['id']) {
@@ -263,7 +299,7 @@ class Attendance extends BaseModel
         $this
             ->status('NOT_PAID')
             ->softDelete([
-                'lecture_id' => $lectureId,
+                ['lecture_id', '=', $lectureId],
                 ['create_time' , '<', time() - $reserveTime],
             ]);
     }

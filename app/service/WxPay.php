@@ -67,17 +67,21 @@ class WxPay
     public function getPrepayId(array $order) : string
     {
         $url = config('wx.api.unified_order');
-        $orderXml = arrayToXml($order);
-        $return = xmlToArray(Curl::post($url, $orderXml));
+        $orderXml = Curl::arrayToXml($order);
+        $return = Curl::post($url, $orderXml)->setOption(['return_form' => 'xml'])->execute();
+
+        if (!$return || !isset($return['result_code'])) {
+            throw (new WxException(110006))->setData($return);
+        }
 
         if ($return['result_code'] == true && $return['return_code'] == true) {
             if (is_null($pi = $return['prepay_id']??null)) {
-                throw new WxException(110006);
+                throw (new WxException(110006))->setData($return);
             } else {
-                return (string)$pi;
+                return (string) $pi;
             }
         } else {
-            throw new WxException(110006);
+            throw (new WxException(110006))->setData($return);
         }
     }
 
@@ -130,7 +134,7 @@ class WxPay
             // 终端ip
             'spbill_create_ip' => config('server_ip'),
             // 回调地址
-            'notify_url' => config('wx.api.pay_notify'),
+            'notify_url' => config('wx.callback.pay_notify'),
             // 交易类型
             'trade_type' => 'JSAPI',
             // 用户标识

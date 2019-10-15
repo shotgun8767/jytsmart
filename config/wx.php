@@ -21,7 +21,11 @@ return [
         'get_wx_qrcode' => 'https://api.weixin.qq.com/wxa/getwxacodeunlimit',
         // 统一下单
         'unified_order' => 'https://api.mch.weixin.qq.com/pay/unifiedorder',
-
-        'pay_notify'    => ''
     ],
+
+    // 回调接口
+    'callback' => [
+        // 统一下单回调接口
+        'pay_notify' => DOMAIN . 'v1/wx/callback/pay_notify'
+    ]
 ];

@@ -13,6 +13,8 @@ class Tag extends BaseModel
      */
     public function getInfo(int $limit) : ?array
     {
+        if (0 == $limit) $limit = true;
+
         return $this
             ->multi($limit)
             ->getArray();

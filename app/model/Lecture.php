@@ -13,12 +13,11 @@ class Lecture extends BaseModel
      * 废弃字段
      * @var array
      */
-    protected $disuse = [ 'sponsor_signature', 'sponsor_wechat', 'sponsor_telephone'];
+    protected $disuse = [ 'sponsor_signature', 'sponsor_wechat', 'sponsor_telephone', 'read_time'];
 
     protected $hidden = [
         'status', 'listorder', 'recallable', 'lecture_type', 'main_image_id',
-        'group_image_id', 'qrcode_id', 'place_id', "sponsor_id", 'require_fields',
-        'read_time', 'withdraw'
+        'group_image_id', 'qrcode_id', 'place_id', "sponsor_id", 'withdraw'
     ];
 
     /**
@@ -62,11 +61,12 @@ class Lecture extends BaseModel
      * @param int $page
      * @param int $row
      * @param int|null $tagId
+     * @param null|string $month
      * @return array
      */
-    public function getPublic(int $page, int $row, ?int $tagId = null) : ?array
+    public function getPublic(int $page, int $row, ?int $tagId = null, ?string $month = null) : ?array
     {
-        return $this->getLectures($page, $row, self::PUBLIC_RANGE, $tagId);
+        return $this->getLectures($page, $row, self::PUBLIC_RANGE, $tagId, $month);
     }
 
     /**
@@ -75,11 +75,12 @@ class Lecture extends BaseModel
      * @param int $row
      * @param int $userId
      * @param int|null $tagId
+     * @param null|string $month
      * @return array|null
      */
-    public function getPrivate(int $page, int $row, int $userId, ?int $tagId = null) : ?array
+    public function getPrivate(int $page, int $row, int $userId, ?int $tagId = null, ?string $month = null) : ?array
     {
-        return $this->getLectures($page, $row, self::PRIVATE_RANGE, $tagId, $userId);
+        return $this->getLectures($page, $row, self::PRIVATE_RANGE, $tagId, $userId, $month);
     }
 
     /**
@@ -174,16 +175,28 @@ class Lecture extends BaseModel
      * @param int $page
      * @param int $row
      * @param int $range
-     * @param int $tagId
-     * @param int $userId
+     * @param int|null $tagId
+     * @param int|null $userId
+     * @param null|string $month
      * @return array|null
      */
-    public function getLectures(int $page, int $row, int $range, ?int $tagId = null, ?int $userId = null) : ?array
+    public function getLectures(int $page, int $row, int $range, ?int $tagId = null, ?int $userId = null, ?string $month = null) : ?array
     {
         $where = ['range' => $range];
 
         if ($range === self::PRIVATE_RANGE) {
             $where['sponsor_id'] = $userId;
+        }
+
+        if ($month) {
+            $end = explode('-', $month);
+            $end[1] = ((int) $end[1]) + 1;
+            $end = implode('-', $end) . '-1';
+            $month = "$month-1";
+
+            $this->getQuery()
+                ->whereTime('start', '>=', $month)
+                ->whereTime('start', '<', $end);
         }
 
         $join = [];

@@ -78,8 +78,8 @@
 
   {
     "controller" : "attendance",
-    "method" : "post",
-    "rule" : ":lectureId",
+    "method" : "get",
+    "rule" : "post/:lectureId",
     "rule_pattern" : {
       "lectureId" : "@id"
     },
@@ -278,6 +278,12 @@
         "desc" : "每页条数",
         "require" : false,
         "default" : 5
+      },
+      "month" : {
+        "type" : "string",
+        "desc" : "筛选月份。格式为yyyy-hh",
+        "max_len" : 8,
+        "require" : false
       }
     },
     "response" : [

@@ -21,11 +21,16 @@
         "max_len" : 4,
         "require" : true
       },
-
       "tag_id" : {
         "type" : "int",
         "desc" : "标签id",
         "max_len" : 11,
+        "require" : false
+      },
+      "month" : {
+        "type" : "string",
+        "desc" : "筛选月份。格式为yyyy-hh",
+        "max_len" : 8,
         "require" : false
       }
     },
@@ -82,7 +87,6 @@
         "max_len" : 4,
         "require" : true
       },
-
       "row" : {
         "type" : "int",
         "desc" : "每页条数",
@@ -93,6 +97,12 @@
         "type" : "int",
         "desc" : "标签id",
         "max_len" : 11,
+        "require" : false
+      },
+      "month" : {
+        "type" : "string",
+        "desc" : "筛选月份。格式为yyyy-hh",
+        "max_len" : 8,
         "require" : false
       }
     },
@@ -150,6 +160,12 @@
         "type" : "int",
         "desc" : "标签id",
         "max_len" : 11,
+        "require" : false
+      },
+      "month" : {
+        "type" : "string",
+        "desc" : "筛选月份。格式为yyyy-hh",
+        "max_len" : 8,
         "require" : false
       }
     },
@@ -250,7 +266,7 @@
         "type" : "string",
         "desc" : "举办城市",
         "max_len" : 20,
-        "require" : true
+        "require" : false
       },
       "address" : {
         "type" : "string",

@@ -108,12 +108,14 @@ class Wx extends BaseApi
     }
 
     /**
-     *
+     * 回调函数
+     * @throws \ReflectionException
+     * @throws \app\exception\DataBaseException
      */
     public function PayNotifyCallback()
     {
         $xml = file_get_contents("php://input");
-        $xml = xmlToArray($xml);
+        $xml = Curl::xmlToArray($xml);
         $number = $xml['out_trade_no'];
 
         if (($xml['return_code']??false) == 'SUCCESS') {
@@ -130,7 +132,7 @@ class Wx extends BaseApi
             'return_code' => "<![CDATA[SUCCESS]]",
             "return_msg" => "<![CDATA[OK]]>"
         ];
-        echo arrayToXml($response);
+        echo Curl::arrayToXml($response);
     }
 
     /**
