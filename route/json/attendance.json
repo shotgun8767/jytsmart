@@ -78,8 +78,8 @@
 
   {
     "controller" : "attendance",
-    "method" : "get",
-    "rule" : "post/:lectureId",
+    "method" : "post",
+    "rule" : ":lectureId",
     "rule_pattern" : {
       "lectureId" : "@id"
     },
@@ -170,7 +170,7 @@
       "gender" : {
         "type" : "int",
         "max_len" : 1,
-        "desc" : "性别：1位男性，0为女性",
+        "desc" : "性别：1为男性，0为女性",
         "require" : false
       },
       "company" : {
@@ -292,9 +292,7 @@
         "message" : "成功获取用户报名的会议",
         "data" : {
           "id" : ["int", "嘉宾表单id(见数据库)"],
-          "lecture_info" : ["array", "会议信息"],
-          "enter_count" : ["int", "报名总人数"],
-          "check_in_count" : ["int", "已签到人数"]
+          "lecture_info" : ["array", "会议信息"]
         }
       },
       {"errcode": 140015}

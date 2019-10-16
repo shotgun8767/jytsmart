@@ -80,7 +80,16 @@ class Lecture extends BaseModel
      */
     public function getPrivate(int $page, int $row, int $userId, ?int $tagId = null, ?string $month = null) : ?array
     {
-        return $this->getLectures($page, $row, self::PRIVATE_RANGE, $tagId, $userId, $month);
+        $return = $this->getLectures($page, $row, self::PRIVATE_RANGE, $tagId, $userId, $month);
+
+        $Attendance = new Attendance;
+        return array_map(function ($array) use ($Attendance) {
+            if (!$lectureId = $array['id']) {
+                return $array;
+            }
+
+            return array_merge($array, $Attendance->getCountOfAttendances($lectureId));
+        }, $return);
     }
 
     /**

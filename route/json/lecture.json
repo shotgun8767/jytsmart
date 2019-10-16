@@ -124,9 +124,11 @@
           "end" : ["int", "结束时间（时间戳）"],
           "lat" : ["double", "纬度"],
           "lng" : ["double", "经度"],
-          "group_image_info" : ["array", "群组二维图片信息"],
+          "group_image_info" : ["array", "群组二维码图片信息"],
           "main_image_info" : ["array", "封面图片信息"],
-          "qr_code_info" : ["array", "签到二维码图片信息"]
+          "qr_code_info" : ["array", "签到二维码图片信息"],
+          "enter_count" : ["int", "报名总人数"],
+          "check_in_count" : ["int", "已签到人数"]
         }
       },
       {
@@ -189,7 +191,9 @@
           "lng" : ["double", "经度"],
           "group_image_info" : ["array", "群组二维码图片信息"],
           "main_image_info" : ["array", "封面图片信息"],
-          "qr_code_info" : ["array", "签到二维码图片信息"]
+          "qr_code_info" : ["array", "签到二维码图片信息"],
+          "enter_count" : ["int", "报名总人数"],
+          "check_in_count" : ["int", "已签到人数"]
         }
       },
       {

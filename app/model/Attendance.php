@@ -272,20 +272,12 @@ class Attendance extends BaseModel
 
         }
 
-        $return = $this
+        return $this
             ->multi()
             ->baseWith($with)
             ->page($page, $row)
             ->order(['listorder' => 'DESC', 'id' => 'DESC'])
             ->getArray($where, ['a.id', 'a.lecture_id']);
-
-        return array_map(function ($array) {
-            if (!$lectureId = $array['lecture_info']['id']) {
-                return $array;
-            }
-
-            return array_merge($array, $this->getCountOfAttendances($lectureId));
-        }, $return);
     }
 
     /**

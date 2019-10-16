@@ -16,7 +16,7 @@
           "enter_fee": ["int", "报名费用"],
           "attendance_count": ["int", "成功报名并付款的嘉宾人数"],
           "total": ["int", "总收入"],
-          "range": ["int", "0为公共会议，1位私人会议"]
+          "range": ["int", "0为公共会议，1为私人会议"]
         }
       },
       {
