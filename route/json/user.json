@@ -21,7 +21,7 @@
           "domain" : ["string", "领域"],
           "occupation" : ["string", "职位"],
           "address" : ["string", "联系地址"],
-          "focus" : ["string", "研究方向"],
+          "focus" : ["string", "行业"],
           "email": ["string", "邮箱"],
           "avatar_url" : ["string", "用户头像url"]
         }
@@ -90,7 +90,7 @@
 
       "focus" : {
         "type" : "string",
-        "desc" : "研究方向",
+        "desc" : "行业",
         "max_len" : 50,
         "require" : false
       },
@@ -139,7 +139,7 @@
           "domain" : ["string", "领域"],
           "occupation" : ["string", "职位"],
           "address" : ["string", "联系地址"],
-          "focus" : ["string", "研究方向"],
+          "focus" : ["string", "行业"],
           "email": ["string", "邮箱"],
           "avatar_url" : ["string", "用户头像url"]
         }

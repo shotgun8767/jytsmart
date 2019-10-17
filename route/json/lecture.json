@@ -6,7 +6,7 @@
     "route": "getPublic",
     "name" : "获取公共会议",
     "desc" : "支持分页操作",
-    "permission" : null,
+    "permission" : "USER",
     "param" : {
       "page" : {
         "type" : "int",
@@ -54,7 +54,8 @@
           "lng" : ["double", "经度"],
           "group_image_info" : ["array", "群组二维图片信息"],
           "main_image_info" : ["array", "封面图片信息"],
-          "qr_code_info" : ["array", "签到二维码图片信息"]
+          "qr_code_info" : ["array", "签到二维码图片信息"],
+          "collected" : ["bool", "客户端用户是否收藏该会议"]
         }
       },
       {
@@ -73,7 +74,7 @@
     "route": "getPrivate",
     "name" : "获取私人会议",
     "desc" : "支持分页操作",
-    "permission" : null,
+    "permission" : "USER",
     "param" : {
       "userId" : {
         "type" : "int",
@@ -127,8 +128,7 @@
           "group_image_info" : ["array", "群组二维码图片信息"],
           "main_image_info" : ["array", "封面图片信息"],
           "qr_code_info" : ["array", "签到二维码图片信息"],
-          "enter_count" : ["int", "报名总人数"],
-          "check_in_count" : ["int", "已签到人数"]
+          "collected" : ["bool", "客户端用户是否收藏该会议"]
         }
       },
       {
@@ -174,7 +174,7 @@
     "response" : [
       {
         "code" : 200,
-        "message" : "成功获取私人会议",
+        "message" : "成功获取客户端用户发布的私人会议",
         "data" : {
           "id" : ["int", "会议id"],
           "title" : ["string", "标题"],
@@ -391,7 +391,7 @@
         "type" : "string",
         "desc" : "举办城市",
         "max_len" : 20,
-        "require" : true
+        "require" : false
       },
       "address" : {
         "type" : "string",

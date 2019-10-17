@@ -1,6 +1,6 @@
 <?php
 
-namespace plugin;
+namespace qr_code;
 
 use Endroid\QrCode\{ErrorCorrectionLevel, QrCode as core};
 use Endroid\QrCode\Response\QrCodeResponse;

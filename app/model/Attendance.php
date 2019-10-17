@@ -3,10 +3,12 @@
 namespace app\model;
 
 use app\exception\AttendanceException;
+use app\exception\LectureException;
 use app\service\Lock;
 use app\service\WxPay;
 use think\db\BaseQuery;
 use app\model\status\Attendance as status;
+use think\facade\Db;
 
 class Attendance extends BaseModel
 {
@@ -39,9 +41,10 @@ class Attendance extends BaseModel
             ->get(['lecture_id' => $lectureId], $fields);
 
         $Collection = new Collection;
-        $res->map(function ($value) use ($userId, $Collection){
+        $type = $Collection::TYPE_USER;
+        $res->map(function ($value) use ($userId, $Collection, $type){
             $foreignId = $value['user_id'];
-            $value['is_subscribed'] = $Collection->refreshQuery()->recordExists($userId, $Collection::TYPE_USER, $foreignId);
+            $value['is_subscribed'] = $Collection->refreshQuery()->recordExists($userId, $type, $foreignId);
         });
 
         return $res->toArray();
@@ -90,8 +93,12 @@ class Attendance extends BaseModel
         }
 
         # 校验时间是否在报名时间内
-        $Lecture    = new Lecture;
-        $info       = $Lecture->getArray($lectureId, ['enter_start', 'enter_end', 'require_fields', 'enter_fee']);
+        $Lecture = new Lecture;
+        $info = $Lecture->getArray($lectureId, ['enter_start', 'enter_end', 'require_fields', 'enter_fee']);
+        if (is_null($info)) {
+            throw new LectureException(120002);
+        }
+
         $enterStart = $info['enter_start'];
         $enterEnd   = $info['enter_end'];
         $enterFee   = $info['enter_fee'];
@@ -144,33 +151,39 @@ class Attendance extends BaseModel
                 if (!$isCharge) {
                     return $this
                         ->refreshQuery()
-                        ->inserts($data, false, $isCharge ? 'NOT_PAID' : 'NORMAL');
+                        ->inserts($data, false, 'NORMAL');
                 }
 
-                $this->getQuery()->startTrans();
+                # 调用支付接口
+                $WxPay = new WxPay;
+                $enterConfig = config('setting.enter');
+                $body   = $enterConfig['order_body'];
+                $detail = $enterConfig['order_detail'];
+                $attach = $enterConfig['order_attach'];
 
+                $order = $WxPay->generateOrder($userId, $WxPay::ACTION_ENTER, $enterFee, $body, $detail, $attach);
+                $prepayId = $WxPay->getPrepayId($order);
+                $_data = [
+                    'number' => $order['out_trade_no'],
+                    'pay' => 0,
+                    'fee' => $enterFee
+                ];
+
+                Db::startTrans();
                 try {
-                    # 调用支付接口
-                    $WxPay = new WxPay;
-                    $enterConfig = config('setting.enter');
-                    $body = $enterConfig['order_body'];
-                    $detail = $enterConfig['order_detail'];
-                    $attach = $enterConfig['order_attach'];
-
-                    $order = $WxPay->generateOrder($userId, $WxPay::ACTION_ENTER, $enterFee, $body, $detail, $attach);
-                    $prepayId = $WxPay->getPrepayId($order);
-                    $_data = [
-                        'number' => $order['out_trade_no'],
-                        'pay' => 0,
-                        'fee' => $enterFee
-                    ];
                     (new Order)->inserts($_data);
-                    $this->refreshQuery()->updates($id, ['order' => $order['out_trade_order']]);
+                    $data['order'] = $order['out_trade_no'];
 
+                    $this
+                        ->refreshQuery()
+                        ->inserts($data, false, 'NOT_PAID');
                     $res = $WxPay->reSign($prepayId);
+
+                    Db::commit();
                     return $res;
                 } catch (\Exception $e) {
-                    $this->getQuery()->rollback();
+                     Db::rollback();
+                    $Lock->release();
                     throw $e;
                 }
             } else {

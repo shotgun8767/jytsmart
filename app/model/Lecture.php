@@ -60,30 +60,69 @@ class Lecture extends BaseModel
      * 获取公共会议
      * @param int $page
      * @param int $row
+     * @param int $userId
      * @param int|null $tagId
      * @param null|string $month
      * @return array
      */
-    public function getPublic(int $page, int $row, ?int $tagId = null, ?string $month = null) : ?array
+    public function getPublic(int $page, int $row, int $userId, ?int $tagId = null, ?string $month = null) : ?array
     {
-        return $this->getLectures($page, $row, self::PUBLIC_RANGE, $tagId, $month);
+        $res = $this->getLectures($page, $row, self::PUBLIC_RANGE, $tagId, $month);
+
+        $Collection = new Collection;
+        $type = $Collection::TYPE_LECTURE;
+        return array_map(function ($value) use ($Collection, $type, $userId){
+            $lectureId = $value['id'];
+            $value['collected'] = $Collection->refreshQuery()->recordExists($userId, $type, $lectureId);
+            return $value;
+        }, $res);
     }
 
     /**
      * 获取私人会议
      * @param int $page
      * @param int $row
+     * @param int $sponsorId
      * @param int $userId
      * @param int|null $tagId
      * @param null|string $month
      * @return array|null
      */
-    public function getPrivate(int $page, int $row, int $userId, ?int $tagId = null, ?string $month = null) : ?array
+    public function getPrivate(int $page, int $row, int $sponsorId, int $userId, ?int $tagId = null, ?string $month = null) : ?array
+    {
+        $sponsorId = (new AdminUser)->getAdminId($sponsorId);
+
+        if (is_null($sponsorId)) return null;
+
+        $return = $this->getLectures($page, $row, self::PRIVATE_RANGE, $tagId, $sponsorId, $month);
+
+        $Collection = new Collection;
+        $type = $Collection::TYPE_LECTURE;
+        return array_map(function ($array) use ($Collection, $userId, $type) {
+            if (!$lectureId = $array['id']) {
+                return $array;
+            }
+
+            $array['collected'] = $Collection->refreshQuery()->recordExists($userId, $type, $lectureId);
+            return $array;
+        }, $return);
+    }
+
+    /**
+     * @param int $page
+     * @param int $row
+     * @param int $userId
+     * @param int|null $tagId
+     * @param string|null $month
+     * @return array
+     * @throws \ReflectionException
+     */
+    public function getPersonal(int $page, int $row, int $userId, ?int $tagId = null, ?string $month = null)
     {
         $return = $this->getLectures($page, $row, self::PRIVATE_RANGE, $tagId, $userId, $month);
 
         $Attendance = new Attendance;
-        return array_map(function ($array) use ($Attendance) {
+        return array_map(function ($array) use ($Attendance, $userId) {
             if (!$lectureId = $array['id']) {
                 return $array;
             }
@@ -185,16 +224,16 @@ class Lecture extends BaseModel
      * @param int $row
      * @param int $range
      * @param int|null $tagId
-     * @param int|null $userId
+     * @param int|null $sponsorId
      * @param null|string $month
      * @return array|null
      */
-    public function getLectures(int $page, int $row, int $range, ?int $tagId = null, ?int $userId = null, ?string $month = null) : ?array
+    public function getLectures(int $page, int $row, int $range, ?int $tagId = null, ?int $sponsorId = null, ?string $month = null) : ?array
     {
         $where = ['range' => $range];
 
         if ($range === self::PRIVATE_RANGE) {
-            $where['sponsor_id'] = $userId;
+            $where['sponsor_id'] = $sponsorId;
         }
 
         if ($month) {
@@ -260,12 +299,13 @@ class Lecture extends BaseModel
         }
 
         // 处理 place
-        $Place = new Place;
-        $place = $data['place'];
-        $data['place_id'] = $Place->inserts(['name' => $place], true);
-        unset($data['place']);
+        $place = $data['place']??null;
+        if ($place) {
+            $Place = new Place;
 
-        // 处理require_fields为空的情况
+            $data['place_id'] = $Place->inserts(['name' => $place], true);
+            unset($data['place']);
+        }
 
         // 添加记录
         $data['range'] = $range;

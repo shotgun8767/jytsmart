@@ -331,9 +331,10 @@ class BaseModel extends Model
 
             if ($replaceWhen) {
                 $this->statusAll();
-                $res = $this->getArray($replaceWhen, ['id']);
+                $res = $this->getArray($replaceWhen, ['id', 'status']);
+                $_status = $this->getOrigin('status');
 
-                if ($res) {
+                if ($res && $status != $_status) {
                     $id = $res['id'];
                     @$this->updateStatus($id, $status);
                     return $id;

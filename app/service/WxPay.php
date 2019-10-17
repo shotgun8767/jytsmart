@@ -35,10 +35,10 @@ class WxPay
 
     /**
      * 再次签名
-     * @param int $prepayId
+     * @param string $prepayId
      * @return array
      */
-    public function reSign(int $prepayId) : array
+    public function reSign(string $prepayId) : array
     {
         $random = Random::fixed(32)
             ->includeDigit()
@@ -71,10 +71,13 @@ class WxPay
         $return = Curl::post($url, $orderXml)->setOption(['return_form' => 'xml'])->execute();
 
         if (!$return || !isset($return['result_code'])) {
+            if (!is_array($return)) {
+                $return = [$return];
+            }
             throw (new WxException(110006))->setData($return);
         }
 
-        if ($return['result_code'] == true && $return['return_code'] == true) {
+        if ($return['result_code'] == 'SUCCESS' && $return['return_code'] == 'SUCCESS') {
             if (is_null($pi = $return['prepay_id']??null)) {
                 throw (new WxException(110006))->setData($return);
             } else {

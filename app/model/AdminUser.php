@@ -11,7 +11,7 @@ class AdminUser extends BaseModel
      * @param int $userId 微信用户id
      * @return int|null
      */
-    public function getAdminId(int $userId)
+    public function getAdminId(int $userId) : ?int
     {
         return $this->getField('id', ['wechat_id' => $userId]);
     }

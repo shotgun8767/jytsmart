@@ -10,7 +10,7 @@ use sap\Package;
 class Attendance extends BaseApi
 {
     /**
-     * 获取指定会议的嘉宾
+     * 获取指定会议的嘉宾a
      * @param int $lectureId
      * @param int $page
      * @param int $row

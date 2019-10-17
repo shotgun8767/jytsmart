@@ -5,7 +5,7 @@ namespace app\controller\v1;
 use app\api\BaseApi;
 use app\exception\LectureException;
 use app\model\{Lecture as model, Image, LectureImage};
-use plugin\QRCode;
+use qr_code\QRCode;
 use sap\Package;
 
 class Lecture extends BaseApi
@@ -20,7 +20,8 @@ class Lecture extends BaseApi
      */
     public function getPublic(int $page, int $row, ?int $tag_id = null, ?string $month = null) : Package
     {
-        $res = (new model)->getPublic($page, $row, $tag_id, $month);
+        $userId = $this->token()->payload('uid');
+        $res = (new model)->getPublic($page, $row, $userId, $tag_id, $month);
 
         return $res ?
             Package::ok('成功获取公共会议', $res) :
@@ -38,7 +39,8 @@ class Lecture extends BaseApi
      */
     public function getPrivate(int $page, int $row, int $userId, ?int $tag_id = null, ?string $month = null) : Package
     {
-        $res = (new model)->getPrivate($page, $row, $userId, $tag_id, $month);
+        $_userId = $this->token()->payload('uid');
+        $res = (new model)->getPrivate($page, $row, $userId, $_userId, $tag_id, $month);
 
         return $res ?
             Package::ok('成功获取私人会议', $res) :
@@ -47,17 +49,22 @@ class Lecture extends BaseApi
 
     /**
      * 获取客户端用户私人会议
+     * @param int $page
+     * @param int $row
+     * @param int|null $tag_id
+     * @param string|null $month
      * @return Package
+     * @throws \ReflectionException
      * @throws \app\exception\TokenException
      */
-    public function getPersonal() : Package
+    public function getPersonal(int $page, int $row, ?int $tag_id = null, ?string $month = null) : Package
     {
         $userId = $this->token()->payload('uid');
+        $res = (new model)->getPersonal($page, $row, $userId, $tag_id, $month);
 
-        return $this
-            ->setMethod('Lecture', 'getPrivate')
-            ->setParam(['userId' => $userId])
-            ->call();
+        return $res ?
+            Package::ok('成功获取客户端用户私人会议', $res) :
+            Package::error(LectureException::class, 120001);
     }
 
     /**
