@@ -1,0 +1,97 @@
+[
+  {
+    "controller" : "organization",
+    "method" : "post",
+    "rule" : "",
+    "route": "new",
+    "name" : "创建主办方",
+    "desc" : "",
+    "permission" : "USER",
+    "post" : {
+      "name" : {
+        "type" : "string",
+        "max_len" : 50,
+        "desc" : "名称",
+        "require" : true
+      },
+      "intro" : {
+        "type" : "string",
+        "max_len" : 0,
+        "desc" : "简介",
+        "require" : false
+      },
+      "phone" : {
+        "type" : "string",
+        "max_len" : 20,
+        "desc" : "联系电话",
+        "require" : false
+      },
+      "email" : {
+        "type" : "string",
+        "max_len" : 50,
+        "desc" : "联系邮箱",
+        "require" : false,
+        "validate" : {
+          "email" : ""
+        }
+      }
+    },
+    "response" : [
+      {
+        "code" : 201,
+        "message" : "成功创建主办方",
+        "data" : {
+          "id" : ["int", "主办方id"]
+        }
+      },
+      {"errcode" : 180001}
+    ]
+  },
+
+  {
+    "controller" : "organization",
+    "method" : "put",
+    "rule" : "",
+    "route": "new",
+    "name" : "修改主办方信息",
+    "desc" : "",
+    "permission" : "USER",
+    "post" : {
+      "name" : {
+        "type" : "string",
+        "max_len" : 50,
+        "desc" : "名称",
+        "require" : false
+      },
+      "intro" : {
+        "type" : "string",
+        "max_len" : 0,
+        "desc" : "简介",
+        "require" : false
+      },
+      "phone" : {
+        "type" : "string",
+        "max_len" : 20,
+        "desc" : "联系电话",
+        "require" : false
+      },
+      "email" : {
+        "type" : "string",
+        "max_len" : 50,
+        "desc" : "联系邮箱",
+        "require" : false,
+        "validate" : {
+          "email" : ""
+        }
+      }
+    },
+    "response" : [
+      {
+        "code" : 200,
+        "message" : "成功修改主办方信息",
+        "data" : {}
+      },
+      {"errcode" : 180002}
+    ]
+  }
+]

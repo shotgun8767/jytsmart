@@ -7,6 +7,7 @@ use app\model\traits\Status;
 use Exception;
 use ReflectionException;
 use think\db\BaseQuery;
+use think\db\Query;
 use think\Model;
 use think\model\Collection;
 use app\exception\DataBaseException;
@@ -267,7 +268,7 @@ class BaseModel extends Model
         $res = $this->get($where, [$field]);
 
         if (!is_null($res)) {
-            $res = $origin ? $res->getOrigin($field) : $res->getData($field);
+            $res = $origin ? $res->getOrigin($field) : $res->toArray()[$field];
             if ($res instanceof Model) {
                 return $this->_toArray($res);
             }
@@ -323,10 +324,12 @@ class BaseModel extends Model
      */
     public function inserts(array $data, $replaceWhen = false, $status = null) : int
     {
-        if ($this->statusMode && $replaceWhen !== false) {
+        if ($this->statusMode) {
             $status = is_null($status) ? ($this->_status[0] ?? 0) : $this->getStatus($status);
             $data[$this->statusField] = $status;
+        }
 
+        if ($this->statusMode && $replaceWhen !== false) {
             if ($replaceWhen === true) $replaceWhen = $data;
 
             if ($replaceWhen) {
@@ -406,6 +409,7 @@ class BaseModel extends Model
         if ($join) {
             foreach ($join as $table => $item) {
                 $alias = $item['alias'];
+                /** @var Query $query */
                 $query->join([$table => $alias], $item['condition'], $item['type']??'INNER');
             }
         }

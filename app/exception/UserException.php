@@ -6,15 +6,15 @@ use sep\{BaseException, HttpCode};
 
 class UserException extends BaseException
 {
-    protected $code = HttpCode::SC_INTERNAL_SERVER_ERROR;
+    protected $code = HttpCode::SC_FORBIDDEN;
 
-    protected $message = 'User Relative error';
+    protected $message = '用户相关异常';
 
     protected $errcode = 100000;
 
     protected $errcodes = [
-        100001 => [HttpCode::SC_NOT_FOUND, '鐢ㄦ埛涓嶅瓨鍦紒'],
-        100002 => [HttpCode::SC_BAD_REQUEST, '鏃犳洿鏂板唴瀹癸紒'],
-        100003 => [HttpCode::SC_OK, '鐢ㄦ埛涓嶅瓨鍦ㄦ垨鏈洿鏂颁换浣曞唴瀹癸紒']
+        100001 => [HttpCode::SC_NOT_FOUND, '用户不存在！'],
+        100002 => [HttpCode::SC_BAD_REQUEST, '无更新内容！'],
+        100003 => [HttpCode::SC_OK, '用户不存在或未更新任何内容！'],
     ];
 }

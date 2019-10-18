@@ -122,7 +122,6 @@ class Attendance extends BaseModel
         $Lock = new Lock;
         $res    = null;
         $times  = 0;     // 并发次数
-        $id     = 0;
 
         # 清除保留名额
         $this->clearReservation($lectureId);
@@ -233,7 +232,7 @@ class Attendance extends BaseModel
             }
 
             # 更新
-            return $this->updates($res['id'], [
+            return $this->refreshQuery()->updates($res['id'], [
                 'check_in' => self::CHECK_IN,
                 'check_in_time' => time()
             ]);

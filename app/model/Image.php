@@ -38,9 +38,11 @@ class Image extends BaseModel
     public function getImageUrlAttr($url)
     {
         static $pre = null;
+
         if (is_null($pre)) {
             $pre = (new \app\resource\Image)->getDomain();
         }
+
         return $pre . $url;
     }
 }

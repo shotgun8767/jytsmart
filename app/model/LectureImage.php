@@ -28,9 +28,14 @@ class LectureImage extends BaseModel
      */
     public function upload(int $lectureId, int $listorder) : int
     {
+        $imageId = (new Image)->upload('image');
+
+        if (!$imageId) return 0;
+
         return $this->inserts([
             'lecture_id' => $lectureId,
-            'listorder' => $listorder
+            'listorder' => $listorder,
+            'image_id'  => $imageId
         ]);
     }
 

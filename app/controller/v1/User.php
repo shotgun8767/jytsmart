@@ -5,7 +5,7 @@ namespace app\controller\v1;
 use app\api\BaseApi;
 use app\exception\UserException;
 use sap\Package;
-use app\model\User as model;
+use app\model\{Image, User as model};
 
 class User extends BaseApi
 {
@@ -46,7 +46,14 @@ class User extends BaseApi
     {
         $userId = $this->token()->payload('uid');
 
-        if (empty($data = $this->param())) {
+        $data = $this->param();
+        $Image = new Image;
+        $imageId = (new Image)->upload('avatar');
+        if ($imageId) {
+            $data['avatar_url'] = $Image->getField('image_url', $imageId);
+        }
+
+        if (empty($data)) {
             return Package::error(UserException::class, 100002);
         }
 

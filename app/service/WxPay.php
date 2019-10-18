@@ -107,8 +107,8 @@ class WxPay
         string $attach = ''
     )
     {
-        // 商品id = 时间戳(10) + 事件（2) + 随机数(4) = 16
-        $orderId = sprintf(time() . $action . rand(1000, 9999));
+        // 商品id = 时间戳(10) * 2 + 事件（2) + 随机数(4) = 16
+        $orderId = time() * 2 . $action . rand(1000, 9999);
         $openid = (new User)->getOpenid($userId);
 
         $random = Random::fixed(32)

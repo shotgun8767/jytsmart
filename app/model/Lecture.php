@@ -3,6 +3,7 @@
 namespace app\model;
 
 use app\exception\LectureException;
+use think\db\BaseQuery;
 
 class Lecture extends BaseModel
 {
@@ -17,7 +18,7 @@ class Lecture extends BaseModel
 
     protected $hidden = [
         'status', 'listorder', 'recallable', 'lecture_type', 'main_image_id',
-        'group_image_id', 'qrcode_id', 'place_id', "sponsor_id", 'withdraw'
+        'group_image_id', 'qrcode_id', 'place_id', "sponsor_id", 'withdraw', 'organization_id'
     ];
 
     /**
@@ -45,37 +46,37 @@ class Lecture extends BaseModel
     ];
 
     /**
-     * 根据id获取会议信息
+     * 根据id获取会议信息（详情）
      * @param int $lectureId
+     * @param int $userId
      * @return array|null
      */
-    public function getById(int $lectureId) : ?array
+    public function getById(int $lectureId, int $userId) : ?array
     {
-        return $this
-            ->baseWith(['groupImageInfo', 'mainImageInfo', 'qrCodeInfo'])
+        $res = $this
+            ->baseWith(['groupImageInfo', 'mainImageInfo', 'qrCodeInfo', 'organizationInfo',
+                'sponsorInfo' => function ($query) {
+                /** @var BaseQuery $query */
+                $query->field(['id', 'telephone']);
+            }])
             ->getArray($lectureId);
+
+        $Collection = new Collection;
+        $res['collected'] = $Collection->recordExists($userId, $Collection::TYPE_LECTURE, $lectureId);
+        return $res;
     }
 
     /**
      * 获取公共会议
      * @param int $page
      * @param int $row
-     * @param int $userId
      * @param int|null $tagId
      * @param null|string $month
      * @return array
      */
-    public function getPublic(int $page, int $row, int $userId, ?int $tagId = null, ?string $month = null) : ?array
+    public function getPublic(int $page, int $row, ?int $tagId = null, ?string $month = null) : ?array
     {
-        $res = $this->getLectures($page, $row, self::PUBLIC_RANGE, $tagId, $month);
-
-        $Collection = new Collection;
-        $type = $Collection::TYPE_LECTURE;
-        return array_map(function ($value) use ($Collection, $type, $userId){
-            $lectureId = $value['id'];
-            $value['collected'] = $Collection->refreshQuery()->recordExists($userId, $type, $lectureId);
-            return $value;
-        }, $res);
+        return $this->getLectures($page, $row, self::PUBLIC_RANGE, $tagId, null, $month);
     }
 
     /**
@@ -83,29 +84,18 @@ class Lecture extends BaseModel
      * @param int $page
      * @param int $row
      * @param int $sponsorId
-     * @param int $userId
      * @param int|null $tagId
      * @param null|string $month
      * @return array|null
      */
-    public function getPrivate(int $page, int $row, int $sponsorId, int $userId, ?int $tagId = null, ?string $month = null) : ?array
+    public function getPrivate(int $page, int $row, int $sponsorId, ?int $tagId = null, ?string $month = null) : ?array
     {
         $sponsorId = (new AdminUser)->getAdminId($sponsorId);
 
         if (is_null($sponsorId)) return null;
 
         $return = $this->getLectures($page, $row, self::PRIVATE_RANGE, $tagId, $sponsorId, $month);
-
-        $Collection = new Collection;
-        $type = $Collection::TYPE_LECTURE;
-        return array_map(function ($array) use ($Collection, $userId, $type) {
-            if (!$lectureId = $array['id']) {
-                return $array;
-            }
-
-            $array['collected'] = $Collection->refreshQuery()->recordExists($userId, $type, $lectureId);
-            return $array;
-        }, $return);
+        return $return;
     }
 
     /**
@@ -173,6 +163,8 @@ class Lecture extends BaseModel
      */
     public function checkSponsor(int $lectureId, int $userId) : void
     {
+        $_sponsorId = (new AdminUser)->getAdminId($userId);
+
         $sponsorId = $this
             ->baseWith(['sponsorInfo'])
             ->getField('sponsor_id', $lectureId);
@@ -181,7 +173,7 @@ class Lecture extends BaseModel
         elseif (is_null($sponsorId)) {
             throw new LectureException(120001);
         }
-        elseif ($sponsorId !== $userId) {
+        elseif ($sponsorId !== $_sponsorId) {
             throw new LectureException(120005);
         }
     }
@@ -377,8 +369,14 @@ class Lecture extends BaseModel
     {
         return $this->belongsTo('Image', 'qrcode_id', 'id');
     }
+
     public function sponsorInfo()
     {
         return $this->belongsTo('AdminUser', 'sponsor_id', 'id');
+    }
+
+    public function organizationInfo()
+    {
+        return $this->belongsTo('organization', 'organization_id', 'id');
     }
 }

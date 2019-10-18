@@ -6,7 +6,7 @@
     "route": "getPublic",
     "name" : "获取公共会议",
     "desc" : "支持分页操作",
-    "permission" : "USER",
+    "permission" : null,
     "param" : {
       "page" : {
         "type" : "int",
@@ -52,10 +52,9 @@
           "end" : ["int", "结束时间（时间戳）"],
           "lat" : ["double", "纬度"],
           "lng" : ["double", "经度"],
-          "group_image_info" : ["array", "群组二维图片信息"],
+          "group_image_info" : ["array", "群组二维码图片信息"],
           "main_image_info" : ["array", "封面图片信息"],
-          "qr_code_info" : ["array", "签到二维码图片信息"],
-          "collected" : ["bool", "客户端用户是否收藏该会议"]
+          "qr_code_info" : ["array", "签到二维码图片信息"]
         }
       },
       {
@@ -74,7 +73,7 @@
     "route": "getPrivate",
     "name" : "获取私人会议",
     "desc" : "支持分页操作",
-    "permission" : "USER",
+    "permission" : null,
     "param" : {
       "userId" : {
         "type" : "int",
@@ -127,8 +126,7 @@
           "lng" : ["double", "经度"],
           "group_image_info" : ["array", "群组二维码图片信息"],
           "main_image_info" : ["array", "封面图片信息"],
-          "qr_code_info" : ["array", "签到二维码图片信息"],
-          "collected" : ["bool", "客户端用户是否收藏该会议"]
+          "qr_code_info" : ["array", "签到二维码图片信息"]
         }
       },
       {
@@ -212,7 +210,7 @@
     "route": "getById",
     "name" : "获取会议信息",
     "desc" : "通过id获取会议信息",
-    "permission" : null,
+    "permission" : "USER",
     "param" : {},
     "post" : {},
     "response" : [
@@ -235,7 +233,8 @@
           "lng" : ["double", "经度"],
           "group_image_info" : ["array", "群组二维码图片信息"],
           "main_image_info" : ["array", "封面图片信息"],
-          "qr_code_info" : ["array", "签到二维码图片信息"]
+          "qr_code_info" : ["array", "签到二维码图片信息"],
+          "collected" : ["bool", "客户端用户是否收藏该会议"]
         }
       },
       {
@@ -633,9 +632,6 @@
         "data" : {}
       },
       {
-        "errcode" : 120001
-      },
-      {
         "errcode" : 120005
       },
       {
@@ -766,7 +762,14 @@
         "require" : true
       }
     },
-    "post" : {},
+    "post" : {
+      "image" : {
+        "type" : "file",
+        "desc" : "图片",
+        "max_len" : 0,
+        "require" : true
+      }
+    },
     "response" : [
       {
         "code" : 201,

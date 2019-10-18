@@ -105,15 +105,21 @@
         }
       },
 
-      "avatar_url" : {
-        "type" : "string",
-        "desc" : "用户头像url",
-        "max_len" : 500,
+      "avatar" : {
+        "type" : "file",
+        "desc" : "用户头像图像文件",
+        "max_len" : 0,
         "require" : false
       }
     },
     "response" : [
-
+      {
+        "code" : 200,
+        "message" : "成功修改用户信息",
+        "data" : {}
+      },
+      {"errcode" : 100002},
+      {"errcode" : 100003}
     ]
   },
 

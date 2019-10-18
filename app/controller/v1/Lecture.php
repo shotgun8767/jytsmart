@@ -20,8 +20,7 @@ class Lecture extends BaseApi
      */
     public function getPublic(int $page, int $row, ?int $tag_id = null, ?string $month = null) : Package
     {
-        $userId = $this->token()->payload('uid');
-        $res = (new model)->getPublic($page, $row, $userId, $tag_id, $month);
+        $res = (new model)->getPublic($page, $row, $tag_id, $month);
 
         return $res ?
             Package::ok('成功获取公共会议', $res) :
@@ -39,8 +38,7 @@ class Lecture extends BaseApi
      */
     public function getPrivate(int $page, int $row, int $userId, ?int $tag_id = null, ?string $month = null) : Package
     {
-        $_userId = $this->token()->payload('uid');
-        $res = (new model)->getPrivate($page, $row, $userId, $_userId, $tag_id, $month);
+        $res = (new model)->getPrivate($page, $row, $userId, $tag_id, $month);
 
         return $res ?
             Package::ok('成功获取私人会议', $res) :
@@ -74,7 +72,8 @@ class Lecture extends BaseApi
      */
     public function getById(int $lectureId) : Package
     {
-        $res = (new model)->getById($lectureId);
+        $userId = $this->token()->payload('uid');
+        $res = (new model)->getById($lectureId, $userId);
 
         return $res ?
             Package::ok("成功获取会议信息", $res) :

@@ -46,10 +46,9 @@ trait Status
         if ($statusClass == null) {
             // 自动匹配
             $files = scandir(App::getAppPath() . 'model/status');
-            $className = basename(get_called_class());
+            $className = basename(str_replace('\\', '/', get_called_class()));
             foreach ($files as $file) {
-                $t = explode('.', $file);
-                if ($t[0] === $className && $t[1] === 'php') {
+                if ($file == "$className.php") {
                     $class = 'app\model\status\\' . $className;
                 }
             }
