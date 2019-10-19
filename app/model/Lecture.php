@@ -14,7 +14,7 @@ class Lecture extends BaseModel
      * 废弃字段
      * @var array
      */
-    protected $disuse = [ 'sponsor_signature', 'sponsor_wechat', 'sponsor_telephone', 'read_time'];
+    protected $disuse = ['sponsor_signature', 'sponsor_wechat', 'sponsor_telephone', 'read_time'];
 
     protected $hidden = [
         'status', 'listorder', 'recallable', 'lecture_type', 'main_image_id',
@@ -348,6 +348,19 @@ class Lecture extends BaseModel
                 'range' => $info['range']
             ];
         }, array_values($list));
+    }
+
+    /**
+     * @param $value
+     * @return array
+     */
+    public function setRequireFieldsAttr($value)
+    {
+        var_dump($value);
+        $value = array_map('trim', explode(',', $value));
+        $en = array_intersect($value, array_keys($this->enterFields));
+        $ch = array_keys(array_intersect($this->enterFields, $value));
+        return array_merge($en, $ch);
     }
 
     public function place()

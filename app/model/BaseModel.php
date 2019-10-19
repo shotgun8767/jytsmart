@@ -268,7 +268,7 @@ class BaseModel extends Model
         $res = $this->get($where, [$field]);
 
         if (!is_null($res)) {
-            $res = $origin ? $res->getOrigin($field) : $res->toArray()[$field];
+            $res = $origin ? $res->getOrigin($field) : $res->getAttr($field);
             if ($res instanceof Model) {
                 return $this->_toArray($res);
             }

@@ -234,6 +234,7 @@
           "group_image_info" : ["array", "群组二维码图片信息"],
           "main_image_info" : ["array", "封面图片信息"],
           "qr_code_info" : ["array", "签到二维码图片信息"],
+          "organization_info" :  ["array", "主办方信息"],
           "collected" : ["bool", "客户端用户是否收藏该会议"]
         }
       },
@@ -349,6 +350,12 @@
         "max_len" : 300,
         "require" : false,
         "default" : "name"
+      },
+      "organization_id" : {
+        "type" : "int",
+        "desc" : "主办方id",
+        "max_len" : 11,
+        "require" : false
       }
     },
     "response" : [
@@ -470,6 +477,12 @@
         "max_len" : 300,
         "require" : false,
         "default" : "name"
+      },
+      "organization_id" : {
+        "type" : "int",
+        "desc" : "主办方id",
+        "max_len" : 11,
+        "require" : false
       }
     },
     "response" : [
@@ -622,6 +635,12 @@
         "type" : "file",
         "desc" : "群组二维码图片文件",
         "max_len" : 0,
+        "require" : false
+      },
+      "organization_id" : {
+        "type" : "int",
+        "desc" : "主办方id",
+        "max_len" : 11,
         "require" : false
       }
     },
