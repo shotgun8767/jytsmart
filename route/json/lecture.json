@@ -41,20 +41,9 @@
         "data" : {
           "id" : ["int", "会议id"],
           "title" : ["string", "标题"],
-          "holder" : ["string", "举办组织"],
           "address" : ["string", "地址"],
-          "enter_fee" : ["int", "参与费用（分）"],
-          "capacity" : ["int", "最大参与人数"],
-          "detail" : ["int", "详情"],
-          "enter_start" : ["int", "报名开始时间（时间戳）"],
-          "enter_end" : ["int", "报名结束时间（时间戳）"],
           "start" : ["int", "开始时间（时间戳）"],
-          "end" : ["int", "结束时间（时间戳）"],
-          "lat" : ["double", "纬度"],
-          "lng" : ["double", "经度"],
-          "group_image_info" : ["array", "群组二维码图片信息"],
-          "main_image_info" : ["array", "封面图片信息"],
-          "qr_code_info" : ["array", "签到二维码图片信息"]
+          "main_image_info" : ["array", "封面图片信息"]
         }
       },
       {
@@ -113,20 +102,9 @@
         "data" : {
           "id" : ["int", "会议id"],
           "title" : ["string", "标题"],
-          "holder" : ["string", "举办组织"],
           "address" : ["string", "地址"],
-          "enter_fee" : ["int", "参与费用（分）"],
-          "capacity" : ["int", "最大参与人数"],
-          "detail" : ["int", "详情"],
-          "enter_start" : ["int", "报名开始时间（时间戳）"],
-          "enter_end" : ["int", "报名结束时间（时间戳）"],
           "start" : ["int", "开始时间（时间戳）"],
-          "end" : ["int", "结束时间（时间戳）"],
-          "lat" : ["double", "纬度"],
-          "lng" : ["double", "经度"],
-          "group_image_info" : ["array", "群组二维码图片信息"],
-          "main_image_info" : ["array", "封面图片信息"],
-          "qr_code_info" : ["array", "签到二维码图片信息"]
+          "main_image_info" : ["array", "封面图片信息"]
         }
       },
       {
@@ -176,20 +154,9 @@
         "data" : {
           "id" : ["int", "会议id"],
           "title" : ["string", "标题"],
-          "holder" : ["string", "举办组织"],
           "address" : ["string", "地址"],
-          "enter_fee" : ["int", "参与费用（分）"],
-          "capacity" : ["int", "最大参与人数"],
-          "detail" : ["int", "详情"],
-          "enter_start" : ["int", "报名开始时间（时间戳）"],
-          "enter_end" : ["int", "报名结束时间（时间戳）"],
           "start" : ["int", "开始时间（时间戳）"],
-          "end" : ["int", "结束时间（时间戳）"],
-          "lat" : ["double", "纬度"],
-          "lng" : ["double", "经度"],
-          "group_image_info" : ["array", "群组二维码图片信息"],
           "main_image_info" : ["array", "封面图片信息"],
-          "qr_code_info" : ["array", "签到二维码图片信息"],
           "enter_count" : ["int", "报名总人数"],
           "check_in_count" : ["int", "已签到人数"]
         }
@@ -208,7 +175,7 @@
       "lectureId" : "@id"
     },
     "route": "getById",
-    "name" : "获取会议信息",
+    "name" : "获取会议信息（详情）",
     "desc" : "通过id获取会议信息",
     "permission" : "USER",
     "param" : {},
@@ -220,7 +187,6 @@
         "data" : {
           "id" : ["int", "会议id"],
           "title" : ["string", "标题"],
-          "holder" : ["string", "举办组织"],
           "address" : ["string", "地址"],
           "enter_fee" : ["int", "报名费用（分）"],
           "capacity" : ["int", "最大参与人数"],

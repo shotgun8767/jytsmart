@@ -14,7 +14,7 @@ class Lecture extends BaseModel
      * 废弃字段
      * @var array
      */
-    protected $disuse = ['sponsor_signature', 'sponsor_wechat', 'sponsor_telephone', 'read_time'];
+    protected $disuse = ['sponsor_signature', 'sponsor_wechat', 'sponsor_telephone', 'read_time', 'holder'];
 
     protected $hidden = [
         'status', 'listorder', 'recallable', 'lecture_type', 'main_image_id',
@@ -53,13 +53,19 @@ class Lecture extends BaseModel
      */
     public function getById(int $lectureId, int $userId) : ?array
     {
+        $fields = [
+            'id', 'title', 'holder', 'address', 'enter_fee', 'capacity', 'detail',
+            'enter_start', 'enter_end', 'start', 'end', 'lat', 'lng', 'group_image_id',
+            'main_image_id', 'qrcode_id'
+        ];
+
         $res = $this
             ->baseWith(['groupImageInfo', 'mainImageInfo', 'qrCodeInfo', 'organizationInfo',
                 'sponsorInfo' => function ($query) {
                 /** @var BaseQuery $query */
                 $query->field(['id', 'telephone']);
             }])
-            ->getArray($lectureId);
+            ->getArray($lectureId, $fields);
 
         $Collection = new Collection;
         $res['collected'] = $Collection->recordExists($userId, $Collection::TYPE_LECTURE, $lectureId);
@@ -251,24 +257,16 @@ class Lecture extends BaseModel
         }
 
         $fields = [
-            'l.id', 'title', 'holder', 'address', 'enter_fee', 'capacity', 'detail',
-            'enter_start', 'enter_end', 'start', 'end', 'lat', 'lng', 'group_image_id',
-            'main_image_id', 'qrcode_id'
+            'l.id', 'title', 'address', 'start', 'main_image_id'
         ];
 
-        $info = $this
+        return $this
             ->multi()
             ->page($page, $row)
             ->order(['listorder' => 'DESC', 'id' => 'DESC'])
             ->baseJoin('l', $join)
             ->baseWith(['groupImageInfo', 'mainImageInfo', 'qrCodeInfo'])
-            ->get($where, $fields);
-
-        if (!$info) return null;
-
-        $hidden = ['require_fields', 'range', 'read_time', 'withdraw'];
-
-        return $info->hidden(array_merge($this->hidden, $hidden))->toArray();
+            ->getArray($where, $fields);
     }
 
     /**

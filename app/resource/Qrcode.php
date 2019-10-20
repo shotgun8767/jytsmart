@@ -2,9 +2,7 @@
 
 namespace app\resource;
 
-use app\service\Resource;
-
-class Qrcode extends Resource
+class Qrcode extends Image
 {
 
 }
